@@ -1,0 +1,2 @@
+# SqueakShortcutConfiguration
+Squeak Shortcut Configuration
