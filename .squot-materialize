@@ -1,10 +1,22 @@
 [
 	SquotTonelMapper {
 		#package : MCPackage {
-			#name : 'SqueakShortcutConfiguration'
+			#name : 'Actions'
 		},
 		#path : FSAbsolutePath [
 			'src'
 		]
+	},
+	SquotTonelMapper {
+		#package : MCPackage {
+			#name : 'BaselineOfActions'
+		},
+		#path : @4
+	},
+	SquotTonelMapper {
+		#package : MCPackage {
+			#name : 'SqueakShortcutConfiguration'
+		},
+		#path : @4
 	}
 ]
