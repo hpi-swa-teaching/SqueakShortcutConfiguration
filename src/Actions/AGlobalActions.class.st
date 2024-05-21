@@ -68,10 +68,10 @@ AGlobalActions class >> isCollectionOfActionShortcutPairs: aValue [
 
 {
 	#category : #'handle actions',
-	#'squeak_changestamp' : 'KK 7/14/2022 14:21'
+	#'squeak_changestamp' : 'MZ 5/21/2024 19:53'
 }
 AGlobalActions class >> isMethodRelevant: aMethod [ 
 
 	^ (aMethod selector = #allGlobalActionDict) not 
-			and: ((aMethod selector includesSubString: #':') not)
+			and: ((aMethod selector includes: (':' at: 1)) not)
 ]

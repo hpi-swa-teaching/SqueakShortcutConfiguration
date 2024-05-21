@@ -1,4 +1,4 @@
 Package {
-	#'squeak_changestamp' : true,
-	#name : #Actions
+	#name : #Actions,
+	#'squeak_changestamp' : true
 }
