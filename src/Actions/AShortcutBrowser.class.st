@@ -333,16 +333,25 @@ AShortcutBrowser >> helpForItem: anInteger [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'MaCl 8/4/2022 16:32'
+	#'squeak_changestamp' : 'JPVS 5/23/2024 14:45'
 }
 AShortcutBrowser >> helpMenu [
-
-	^ DialogWindow new
+	| window msg body |
+	window := DialogWindow new
 		title: 'How to use';
 		createButton: 'Thanks!' value: true;
 		exclusive: false;
 		message: self helpText;
-		yourself
+		yourself.
+	
+	"scroll pane creation and sizing"
+	body := window submorphNamed: 'Body'.
+	msg := body submorphNamed: 'Message'.
+	body addMorph: (msg inAScrollPane width: (msg width + ScrollPane scrollBarThickness); color: body color).
+	
+	
+
+	^ window
 ]
 
 {
