@@ -173,7 +173,7 @@ AShortcutBrowser >> browse: aClass selector: aSelector [
 
 {
 	#category : #browsing,
-	#'squeak_changestamp' : 'KK 8/4/2022 10:29'
+	#'squeak_changestamp' : 'MZ 5/23/2024 09:46'
 }
 AShortcutBrowser >> browseActionsForSelectedClass [
 
@@ -183,12 +183,12 @@ AShortcutBrowser >> browseActionsForSelectedClass [
 	systemNavigator := SystemNavigation new.
 	
 	(self selectedClass) ifNotNil: [
-		methodList := systemNavigator 
+		methodList := (systemNavigator 
 			allMethodsSelect: [:method | self aactionsApi hasAnyActionPragmas: method] 
-				localTo: self selectedClass.
+				localTo: self selectedClass) asArray.
 				
 		systemNavigator 
-			browseMessageList: methodList 
+			browseMessageList: methodList
 			name: navigatorTitle 
 			autoSelect: 	navigatorTitle]
 
