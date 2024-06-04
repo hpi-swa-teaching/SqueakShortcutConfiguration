@@ -39,14 +39,26 @@ SSC_ShortcutBrowser >> actionIndex: anObject [
 ]
 
 {
-	#category : #todo,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:56'
+	#category : #accessing,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:55'
 }
 SSC_ShortcutBrowser >> actions [
 	self hasClassSelected
 		ifFalse: [^ {}].
 	
-	self notYetImplemented.
+	^ SSC_API actionsForClass: (self classNames at: self classIndex)
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 12:10'
+}
+SSC_ShortcutBrowser >> actionsListRepresentation [
+	| collection |
+	collection := SortedCollection sortBlock: [:a :b | a title <= b title].
+	self actions do: [:each | collection add: each].
+	
+	^ collection
 ]
 
 {
@@ -101,12 +113,12 @@ SSC_ShortcutBrowser >> classIndex [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:52'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 12:10'
 }
 SSC_ShortcutBrowser >> classIndex: anObject [
 	classIndex := anObject.
 	self changed: #classIndex.
-	self changed: #mainView.
+	self changed: #actionsListRepresentation.
 ]
 
 {
@@ -118,25 +130,25 @@ SSC_ShortcutBrowser >> classListTransform [
 ]
 
 {
-	#category : #todo,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:49'
+	#category : #accessing,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:46'
 }
 SSC_ShortcutBrowser >> classNames [
-	^ {}
+	^ SSC_API classNames
 ]
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 12:19'
 }
 SSC_ShortcutBrowser >> createActionsListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
-		list: #classNames;
-		keystrokePreview: #enumListKeyPress:list:;
-		name: #leftSideClassList;
-		getIndex: #classIndex;
-		setIndex: #classIndex:;
+		list: #actionsListRepresentation;
+		keystrokePreview: #previewKeyStroke:forList:;
+		name: #actionsList;
+		getIndex: #actionIndex;
+		setIndex: #actionIndex:;
 		helpItem: #itemName:;
 		frame: self actionsListTransform;
 		yourself
@@ -189,14 +201,14 @@ SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 12:20'
 }
 SSC_ShortcutBrowser >> createClassListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
 		list: #classNames;
-		keystrokePreview: #enumListkeyPress:list:;
-		name: #leftSideClassList;
+		keystrokePreview: #previewKeyStroke:forList:;
+		name: #classList;
 		getIndex: #classIndex; 
 		setIndex: #classIndex:; 
 		helpItem: #itemName:;
@@ -241,15 +253,12 @@ SSC_ShortcutBrowser >> initialize [
 ]
 
 {
-	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:54'
+	#category : #todo,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 12:24'
 }
-SSC_ShortcutBrowser >> mainView [
-	| collection |
-	collection := SortedCollection sortBlock: [:a :b | a title <= b title].
-	self actions do: [:each | each writeListRepresentationOn: collection].
-	
-	^ collection
+SSC_ShortcutBrowser >> previewKeyStroke: aKeyboardEvent forList: aMorph [
+	"no idea what this is for, but returning false makes the preview work"
+	^ false
 ]
 
 {
