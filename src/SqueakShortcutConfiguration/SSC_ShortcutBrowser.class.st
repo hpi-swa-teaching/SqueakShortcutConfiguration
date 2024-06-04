@@ -50,8 +50,16 @@ SSC_ShortcutBrowser >> actions [
 ]
 
 {
+	#category : #default,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
+}
+SSC_ShortcutBrowser >> actionsListTransform [
+	^ 0@self buttonPanelHeight corner: 1@1
+]
+
+{
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 22:13'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:25'
 }
 SSC_ShortcutBrowser >> buildWith: aToolBuilder [
 	| windowSpec |
@@ -61,7 +69,7 @@ SSC_ShortcutBrowser >> buildWith: aToolBuilder [
 		children: OrderedCollection new.
 	
 	windowSpec children
-		add: (self createActionsListSpecWith: aToolBuilder);
+		add: (self createClassListSpecWith: aToolBuilder);
 		add: (self createRightPanelSpecWith: aToolBuilder).
 	
 	^ aToolBuilder buildPluggableWindow: windowSpec.
@@ -73,6 +81,14 @@ SSC_ShortcutBrowser >> buildWith: aToolBuilder [
 }
 SSC_ShortcutBrowser >> buttonPanelHeight [
 	^ 0.05
+]
+
+{
+	#category : #default,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
+}
+SSC_ShortcutBrowser >> buttonPanelTransform [
+	^ 0@0 corner: 1@self buttonPanelHeight
 ]
 
 {
@@ -94,6 +110,14 @@ SSC_ShortcutBrowser >> classIndex: anObject [
 ]
 
 {
+	#category : #default,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:32'
+}
+SSC_ShortcutBrowser >> classListTransform [
+	^ 0@0 corner: 0.25@1
+]
+
+{
 	#category : #todo,
 	#'squeak_changestamp' : 'JPVS 5/23/2024 21:49'
 }
@@ -103,7 +127,7 @@ SSC_ShortcutBrowser >> classNames [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 22:12'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
 }
 SSC_ShortcutBrowser >> createActionsListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
@@ -114,19 +138,19 @@ SSC_ShortcutBrowser >> createActionsListSpecWith: aToolBuilder [
 		getIndex: #classIndex;
 		setIndex: #classIndex:;
 		helpItem: #itemName:;
-		frame: self positionClassList;
+		frame: self actionsListTransform;
 		yourself
 ]
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:36'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
 }
 SSC_ShortcutBrowser >> createButtonPanelSpecWith: aToolBuilder [ 
 	^ aToolBuilder pluggablePanelSpec new
 		model: self;
 		children: (self createButtonSpecsWith: aToolBuilder);
-		frame: self positionButtonPanel;
+		frame: self buttonPanelTransform;
 		layout: #horizontal;
 		yourself
 ]
@@ -165,14 +189,30 @@ SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 22:10'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
+}
+SSC_ShortcutBrowser >> createClassListSpecWith: aToolBuilder [
+	^ aToolBuilder pluggableListSpec new
+		model: self;
+		list: #classNames;
+		keystrokePreview: #enumListkeyPress:list:;
+		name: #leftSideClassList;
+		getIndex: #classIndex; 
+		setIndex: #classIndex:; 
+		helpItem: #itemName:;
+		frame: self classListTransform.
+]
+
+{
+	#category : #toolbuilder,
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
 }
 SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 	| mainPanel |
 	mainPanel := aToolBuilder pluggablePanelSpec new
 		model: self;
 		children: OrderedCollection new;
-		frame: self positionMainList;
+		frame: self rightPanelTransform;
 		yourself.
 	
 	mainPanel children
@@ -214,34 +254,10 @@ SSC_ShortcutBrowser >> mainView [
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:36'
+	#'squeak_changestamp' : 'JPVS 6/4/2024 11:32'
 }
-SSC_ShortcutBrowser >> positionButtonPanel [
-	^ 0@0 corner: 1@self buttonPanelHeight
-]
-
-{
-	#category : #default,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 22:09'
-}
-SSC_ShortcutBrowser >> positionClassList [
-	^ 0@0 corner: 0.25@1
-]
-
-{
-	#category : #default,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:32'
-}
-SSC_ShortcutBrowser >> positionMainList [
-	^ 0.25@0 corner: 1@1
-]
-
-{
-	#category : #default,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:48'
-}
-SSC_ShortcutBrowser >> positionRightSide [
-	^ 0@0.06 corner: 1@1
+SSC_ShortcutBrowser >> rightPanelTransform [
+	^ self classListTransform width@0 corner: 1@1
 ]
 
 {
