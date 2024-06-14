@@ -1,35 +1,19 @@
 Class {
 	#name : #TestClass,
 	#superclass : #Object,
+	#classVars : [
+		'Action1',
+		'Action2'
+	],
 	#category : #SqueakShortcutConfiguration
 }
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'JPVS 6/5/2024 22:56'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:23'
 }
-TestClass class >> actions [
-	<ActionProvider>
-	
-	^ {SSC_Action new title: 'Test Action'}
-]
-
-{
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'JPVS 6/5/2024 23:17'
-}
-TestClass class >> actions2 [
-	<ActionProvider>
-	
-	^ {SSC_Action new title: 'Test Action2'}
-]
-
-{
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'JPVS 6/5/2024 23:32'
-}
-TestClass class >> actions3 [
-	<ActionProvider>
-	
-	^ {SSC_Action new title: 'Test Action3'}
+TestClass class >> sscActions [
+	Action1 ifNil: [Action1 := SSC_Action new title: 'Test Action 1'].
+	Action2 ifNil: [Action2 := SSC_Action new title: 'Test Action 2'].
+	^ {Action1. Action2}
 ]

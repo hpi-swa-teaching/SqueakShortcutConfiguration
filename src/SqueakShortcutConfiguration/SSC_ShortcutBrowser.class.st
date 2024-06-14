@@ -40,13 +40,13 @@ SSC_ShortcutBrowser >> actionIndex: anObject [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 11:55'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:06'
 }
 SSC_ShortcutBrowser >> actions [
 	self hasClassSelected
 		ifFalse: [^ {}].
 	
-	^ SSC_API actionsForClass: (self classNames at: self classIndex)
+	^ SSC_API actionsForClassNamed: (self classNames at: self classIndex)
 ]
 
 {

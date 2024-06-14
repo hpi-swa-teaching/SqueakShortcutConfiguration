@@ -2,7 +2,7 @@ Class {
 	#name : #'SSC_API',
 	#superclass : #Object,
 	#instVars : [
-		'actionProviderDict'
+		'configurableClasses'
 	],
 	#classVars : [
 		'UniqueInstance'
@@ -11,19 +11,35 @@ Class {
 }
 
 {
-	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:37'
+	#category : #default,
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:17'
 }
-SSC_API class >> actionsForClass: aSymbol [
-	^ self uniqueInstance actionsForClass: aSymbol
+SSC_API class >> actionProviderMethodName [
+	^ 'sscActions' asSymbol
 ]
 
 {
-	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:37'
+	#category : #uniqueInstanceAccessing,
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:06'
+}
+SSC_API class >> actionsForClassNamed: aSymbol [
+	^ self uniqueInstance actionsForClassNamed: aSymbol
+]
+
+{
+	#category : #uniqueInstanceAccessing,
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:25'
 }
 SSC_API class >> classNames [
-	^ self uniqueInstance configurableClasses collect: [:aClass | aClass name]
+	^ self uniqueInstance configurableClasses asArray collect: [:aClass | aClass name]
+]
+
+{
+	#category : #uniqueInstanceAccessing,
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:10'
+}
+SSC_API class >> configurableClasses [
+	^ self uniqueInstance configurableClasses
 ]
 
 {
@@ -46,27 +62,22 @@ SSC_API class >> uniqueInstance [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:35'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:06'
 }
-SSC_API >> actionsForClass: aSymbol [
-	| class actions |
+SSC_API >> actionsForClassNamed: aSymbol [
+	| class |
 	class := Smalltalk classNamed: aSymbol.
-	actions := {} asBag.
-	(actionProviderDict at: (Smalltalk classNamed: aSymbol)) do: [:methodName |
-		actions addAll: (class perform: methodName).
-	].
-	^ actions
+	class ifNil: [^ {} asSet].
+	(class class canUnderstand: self class actionProviderMethodName) ifFalse: [^ {} asSet].
+	^ (class perform: self class actionProviderMethodName) asSet
 ]
 
 {
 	#category : #'action-providers',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:35'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:20'
 }
 SSC_API >> addActionProvider: aCompiledMethod [
-	| class |
-	class := aCompiledMethod methodClass instanceSide.
-	(actionProviderDict includesKey: class) ifFalse: [actionProviderDict at: class put: {} asSet].
-	(actionProviderDict at: class) add: aCompiledMethod selector.
+	configurableClasses add: (aCompiledMethod methodClass instanceSide).
 ]
 
 {
@@ -83,38 +94,37 @@ SSC_API >> addSystemChangeListener: method for: change [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:35'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:23'
 }
 SSC_API >> configurableClasses [
-	^ actionProviderDict keys
+	^ configurableClasses
 ]
 
 {
 	#category : #'initialize-release',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:36'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:20'
 }
 SSC_API >> initialize [
 	super initialize.
-	actionProviderDict := {} asDictionary.
+	configurableClasses := {} asDictionary.
 	
 	self addSystemChangeListener: #onSystemChangeAdded: for: #Added.
 	self addSystemChangeListener: #onSystemChangeRemoved: for: #Removed.
-	self addSystemChangeListener: #onSystemChangeRenamed: for: #Renamed.
 	
 	self scan.
 ]
 
 {
 	#category : #'action-providers',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:36'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:04'
 }
 SSC_API >> isActionProvider: aCompiledMethod [
-	^ (aCompiledMethod pragmas anySatisfy: [:each | each keyword = #ActionProvider]) and: (aCompiledMethod methodClass isKindOf: Metaclass)
+	^ (aCompiledMethod selector = SSC_API actionProviderMethodName) and: (aCompiledMethod methodClass isKindOf: Metaclass)
 ]
 
 {
 	#category : #events,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:36'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:04'
 }
 SSC_API >> onSystemChangeAdded: anEvent [
 	(self isActionProvider: anEvent item) ifTrue: [
@@ -143,26 +153,21 @@ SSC_API >> release [
 
 {
 	#category : #'action-providers',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:36'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:22'
 }
 SSC_API >> removeActionProvider: aCompiledMethod [
-	| class |
-	class := aCompiledMethod methodClass instanceSide.
-	(actionProviderDict includesKey: class) ifTrue: [
-		(actionProviderDict at: class) remove: aCompiledMethod selector.
-		((actionProviderDict at: class) size = 0) ifTrue: [actionProviderDict removeKey: class].
-	].
+	configurableClasses remove: aCompiledMethod methodClass instanceSide.
 ]
 
 {
 	#category : #'action-providers',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:36'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:22'
 }
 SSC_API >> scan [
-	actionProviderDict := {} asDictionary.
+	configurableClasses := {} asSet.
 	Smalltalk allClassesDo: [:aClass |
 		aClass class methodsDo: [:aMethod |
-			(self isActionProvider: aMethod) ifTrue: [self addActionProvider: aMethod].
+			(self isActionProvider: aMethod) ifTrue: [self halt.self addActionProvider: aMethod].
 		]
 	].
 ]
