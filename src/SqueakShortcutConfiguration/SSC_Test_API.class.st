@@ -9,30 +9,21 @@ Class {
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:25'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:05'
 }
 SSC_Test_API >> actionProviderFormat [
 	^
 '{1}
-	<ActionProvider>
 	{3}
 	^ {2}'
 ]
 
 {
 	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:37'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:05'
 }
-SSC_Test_API >> addActionProvider1 [
-	self addActionProvider: self nameActionProvider1 actions: {'Action 1s Title'. 'Action 2s Title'}
-]
-
-{
-	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:37'
-}
-SSC_Test_API >> addActionProvider2 [
-	self addActionProvider: self nameActionProvider2 actions: {'Action 3s Title'. 'Action 4s Title'}
+SSC_Test_API >> addActionProvider [
+	self addActionProvider: self nameActionProvider actions: {'Action 1s Title'. 'Action 2s Title'}
 ]
 
 {
@@ -41,6 +32,14 @@ SSC_Test_API >> addActionProvider2 [
 }
 SSC_Test_API >> addActionProvider: name actions: stringCollection [
 	test_class class compile: (self codeForActionProvider: name withActionTitles: stringCollection)
+]
+
+{
+	#category : #'test-class-interaction',
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:05'
+}
+SSC_Test_API >> addActionProviderWrong [
+	self addActionProvider: self nameActionProviderWrong actions: {'Action 3s Title'. 'Action 4s Title'}
 ]
 
 {
@@ -53,10 +52,18 @@ SSC_Test_API >> classCreationCategory [
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 6/6/2024 14:52'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:42'
 }
-SSC_Test_API >> classCreationName [
-	^ #'SSC_Test_API_Test_Class'
+SSC_Test_API >> classCreationNameOriginal [
+	^ 'SSC_Test_API_Test_Class_1' asSymbol
+]
+
+{
+	#category : #default,
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:44'
+}
+SSC_Test_API >> classCreationNameOther [
+	^ 'SSC_Test_API_Test_Class_2' asSymbol
 ]
 
 {
@@ -86,33 +93,33 @@ SSC_Test_API >> codeForNewActionWithTitle: aString [
 
 {
 	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:35'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:06'
 }
-SSC_Test_API >> executeActionProvider1 [
-	^ test_class perform: self nameActionProvider1 asSymbol
+SSC_Test_API >> executeActionProvider [
+	^ test_class perform: self nameActionProvider asSymbol
 ]
 
 {
 	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:34'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:06'
 }
-SSC_Test_API >> executeActionProvider2 [
-	^ test_class perform: self nameActionProvider2 asSymbol
+SSC_Test_API >> executeActionProviderWrong [
+	^ test_class perform: self nameActionProviderWrong asSymbol
 ]
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:33'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:58'
 }
-SSC_Test_API >> nameActionProvider1 [
-	^ 'actions1'
+SSC_Test_API >> nameActionProvider [
+	^ SSC_API actionProviderMethodName
 ]
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:33'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:05'
 }
-SSC_Test_API >> nameActionProvider2 [
+SSC_Test_API >> nameActionProviderWrong [
 	^ 'actions2'
 ]
 
@@ -126,18 +133,18 @@ SSC_Test_API >> newActionFormat [
 
 {
 	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:33'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:06'
 }
-SSC_Test_API >> removeActionProvider1 [
-	self removeMethod: self nameActionProvider1
+SSC_Test_API >> removeActionProvider [
+	self removeMethod: self nameActionProvider
 ]
 
 {
 	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:33'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:07'
 }
-SSC_Test_API >> removeActionProvider2 [
-	self removeMethod: self nameActionProvider2
+SSC_Test_API >> removeActionProviderWrong [
+	self removeMethod: self nameActionProviderWrong
 ]
 
 {
@@ -150,25 +157,41 @@ SSC_Test_API >> removeMethod: aString [
 
 {
 	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:01'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:14'
 }
-SSC_Test_API >> renameActionProvider1to2 [
-	| refactoring |
-	refactoring := RBRenameMethodRefactoring renameMethod: self nameActionProvider1 asSymbol in: test_class class to: self nameActionProvider2 asSymbol permutation: (1 to: self nameActionProvider1 asSymbol numArgs).
-	refactoring execute.
+SSC_Test_API >> renameActionProviderToWrong [
+	(RBRenameMethodRefactoring
+		renameMethod: self nameActionProvider
+		in: test_class class
+		to: self nameActionProviderWrong
+		permutation: (1 to: self nameActionProvider numArgs)
+	) execute.
+]
+
+{
+	#category : #'test-class-interaction',
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:37'
+}
+SSC_Test_API >> setClassNameOriginal: aBool [
+	| newName |
+	aBool ifTrue: [newName := self classCreationNameOriginal]; ifFalse: [newName := self classCreationNameOther].
+	(RBRenameClassRefactoring rename: test_class to: newName asString) execute.
+	
 ]
 
 {
 	#category : #'setup-teardown',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:04'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:46'
 }
 SSC_Test_API >> setUp [
 	super setUp.
 	SSC_API reset.
-	self assert: (Smalltalk allClasses includes: (Smalltalk classNamed: self classCreationName)) not.
+	
+	self deny: (Smalltalk allClasses includes: (Smalltalk classNamed: self classCreationNameOriginal)).
+	self deny: (Smalltalk allClasses includes: (Smalltalk classNamed: self classCreationNameOther)).
 	
 	test_class := Object 
-		subclass: self classCreationName
+		subclass: self classCreationNameOriginal
 		instanceVariableNames: ''
 		classVariableNames: ''
 		poolDictionaries: ''
@@ -177,50 +200,66 @@ SSC_Test_API >> setUp [
 
 {
 	#category : #'setup-teardown',
-	#'squeak_changestamp' : 'JPVS 6/6/2024 14:53'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:48'
 }
 SSC_Test_API >> tearDown [
 	super tearDown.
 	
-	Smalltalk removeClassNamed: self classCreationName.
+	Smalltalk removeClassNamed: self classCreationNameOriginal.
+	Smalltalk removeClassNamed: self classCreationNameOther.
 ]
 
 {
 	#category : #tests,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:44'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:06'
 }
-SSC_Test_API >> testAdding [
-	self addActionProvider1.
-	self assert: (SSC_API actionsForClass: self classCreationName) asSet equals: self executeActionProvider1 asSet.
+SSC_Test_API >> testAddingActionProvider [
+	self addActionProvider.
+	self assert: (SSC_API actionsForClassNamed: self classCreationNameOriginal) asSet equals: self executeActionProvider asSet.
 	self assert: (SSC_API uniqueInstance configurableClasses includes: test_class ).
-	self addActionProvider2.
-	self assert: (SSC_API actionsForClass: self classCreationName) asSet
-		equals: (self executeActionProvider1 asSet addAll: self executeActionProvider2; yourself).
-	self removeActionProvider1.
-	self removeActionProvider2.
+	self removeActionProvider.
 ]
 
 {
 	#category : #tests,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 13:45'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:11'
 }
-SSC_Test_API >> testRemoving [
-	self addActionProvider2.
-	self addActionProvider1.
-	self removeActionProvider2.
-	self assert: (SSC_API actionsForClass: self classCreationName) asSet equals: self executeActionProvider1 asSet.
-	self removeActionProvider1.
+SSC_Test_API >> testAddingActionProviderWrong [
+	self addActionProviderWrong.
+	self deny: (SSC_API uniqueInstance configurableClasses includes: test_class ).
+	self removeActionProviderWrong.
+]
+
+{
+	#category : #tests,
+	#'squeak_changestamp' : 'JPVS 6/14/2024 12:10'
+}
+SSC_Test_API >> testRemovingActionProvider [
+	self addActionProvider.
+	self removeActionProvider.
 	self deny: (SSC_API uniqueInstance configurableClasses includes: test_class ).
 ]
 
 {
 	#category : #tests,
-	#'squeak_changestamp' : 'JPVS 6/7/2024 14:05'
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:06'
 }
-SSC_Test_API >> testRenaming [
-	self addActionProvider1.
-	self renameActionProvider1to2.
-	self assert: (SSC_API actionsForClass: self classCreationName) asSet equals: self executeActionProvider2 asSet.
-	self removeActionProvider2.
-	self deny: (SSC_API uniqueInstance configurableClasses includes: test_class ).
+SSC_Test_API >> testRenamingClass [
+	self addActionProvider.
+	self setClassNameOriginal: false.
+	self assert: (SSC_API actionsForClassNamed: self classCreationNameOriginal) asSet equals: {} asSet.
+	self assert: (SSC_API actionsForClassNamed: self classCreationNameOther) asSet equals: self executeActionProvider asSet.
+	self setClassNameOriginal: true.
+	self removeActionProvider.
+]
+
+{
+	#category : #tests,
+	#'squeak_changestamp' : 'JPVS 6/14/2024 13:11'
+}
+SSC_Test_API >> testRenamingMethod [
+	self addActionProvider.
+	self renameActionProviderToWrong.
+	self assert: (SSC_API actionsForClassNamed: test_class name) asSet equals: {} asSet.
+	self removeActionProviderWrong.
 ]
