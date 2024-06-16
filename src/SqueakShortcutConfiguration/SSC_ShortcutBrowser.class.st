@@ -237,22 +237,43 @@ SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/16/2024 16:21'
+	#'squeak_changestamp' : 'yl 6/16/2024 17:02'
 }
 SSC_ShortcutBrowser >> createShortcut [
-	| window msg body |
-	window := DialogWindow new
-		title: 'How to use';
-		createButton: 'Thanks!' value: true;
-		exclusive: false;
-		message: 'Hello World';
-		yourself.
-	
+	| window msg body inputField scrollPane |
+	window := DialogWindow new title: 'Create a Shortcut';
+				 createButton: 'Save!' value: true;
+				 exclusive: false;
+				message: 'A simple input field to create your very own Shortcut'
+				 yourself.
 	"scroll pane creation and sizing"
 	body := window submorphNamed: 'Body'.
 	msg := body submorphNamed: 'Message'.
-	body addMorph: (msg inAScrollPane width: (msg width + ScrollPane scrollBarThickness); color: body color).
-	
+	scrollPane := msg inAScrollPane.
+	scrollPane width: msg width + ScrollPane scrollBarThickness.
+	scrollPane color: body color.
+	body addMorph: scrollPane.
+	"Create and add the input field"
+	inputField := PluggableTextMorphPlus on: self text: #getInputText accept: #setInputText.
+	inputField width: 500.
+	inputField height: 250.
+	inputField borderWidth: 1.
+	inputField balloonText: 'Your Shortcut here...'.
+	inputField borderColor: Color black.
+
+	"Position the input field below
+	the message"
+	body addMorph: inputField.
+	inputField position: scrollPane bottomLeft + (0 @ 10).
+	^ window
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'yl 6/16/2024 16:52'
+}
+SSC_ShortcutBrowser >> getInputText [
+^ ''
 ]
 
 {
@@ -296,6 +317,15 @@ SSC_ShortcutBrowser >> previewKeyStroke: aKeyboardEvent forList: aMorph [
 }
 SSC_ShortcutBrowser >> rightPanelTransform [
 	^ self classListTransform width@0 corner: 1@1
+]
+
+{
+	#category : #testing,
+	#'squeak_changestamp' : 'yl 6/16/2024 16:52'
+}
+SSC_ShortcutBrowser >> setInputText: newText [
+    
+    Transcript show: 'Input text set to: ', newText; cr.
 ]
 
 {
