@@ -161,13 +161,13 @@ SSC_API >> removeActionProvider: aCompiledMethod [
 
 {
 	#category : #'action-providers',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 13:22'
+	#'squeak_changestamp' : 'yl 6/16/2024 15:46'
 }
 SSC_API >> scan [
 	configurableClasses := {} asSet.
 	Smalltalk allClassesDo: [:aClass |
 		aClass class methodsDo: [:aMethod |
-			(self isActionProvider: aMethod) ifTrue: [self halt.self addActionProvider: aMethod].
+			(self isActionProvider: aMethod) ifTrue: [self addActionProvider: aMethod].
 		]
 	].
 ]

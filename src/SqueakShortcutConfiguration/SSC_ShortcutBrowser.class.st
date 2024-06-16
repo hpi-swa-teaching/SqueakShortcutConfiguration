@@ -182,14 +182,15 @@ SSC_ShortcutBrowser >> createButtonSpecWith: aToolBuilder named: aString action:
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:41'
+	#'squeak_changestamp' : 'yl 6/16/2024 16:21'
 }
 SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [ 
 	^ {
 		{'Help' . #openHelpMenu . nil} .
 		{'Reset locals' . #resetLocalShortcutsForSelectedClass . nil} .
 		{'Reset globals' . #resetGlobalShortcutsForSelectedClass . nil} .
-		{'Reset all' . #resetShortcuts . nil}
+		{'Reset all' . #resetShortcuts . nil} .
+		{'Create Shortcut' . #openShortcutMenu . nil}
 	} collect: [:each |
 		self
 			createButtonSpecWith: aToolBuilder
@@ -235,6 +236,26 @@ SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 ]
 
 {
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'yl 6/16/2024 16:21'
+}
+SSC_ShortcutBrowser >> createShortcut [
+	| window msg body |
+	window := DialogWindow new
+		title: 'How to use';
+		createButton: 'Thanks!' value: true;
+		exclusive: false;
+		message: 'Hello World';
+		yourself.
+	
+	"scroll pane creation and sizing"
+	body := window submorphNamed: 'Body'.
+	msg := body submorphNamed: 'Message'.
+	body addMorph: (msg inAScrollPane width: (msg width + ScrollPane scrollBarThickness); color: body color).
+	
+]
+
+{
 	#category : #testing,
 	#'squeak_changestamp' : 'JPVS 5/23/2024 21:57'
 }
@@ -250,6 +271,14 @@ SSC_ShortcutBrowser >> initialize [
 	super initialize.
 	self classIndex: 0.
 	self actionIndex: 1.
+]
+
+{
+	#category : #todo,
+	#'squeak_changestamp' : 'yl 6/16/2024 16:22'
+}
+SSC_ShortcutBrowser >> openShortcutMenu [
+	self createShortcut openInWorld
 ]
 
 {
