@@ -12,10 +12,12 @@ Class {
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 6/14/2024 13:17'
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:29'
 }
 SSC_API class >> actionProviderMethodName [
-	^ 'sscActions' asSymbol
+	"The name of the class method that the scan method will look for"
+	
+	^ #SSCActions
 ]
 
 {
@@ -161,7 +163,7 @@ SSC_API >> removeActionProvider: aCompiledMethod [
 
 {
 	#category : #'action-providers',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 13:22'
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:29'
 }
 SSC_API >> scan [
 	configurableClasses := {} asSet.

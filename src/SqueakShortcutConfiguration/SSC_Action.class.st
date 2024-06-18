@@ -2,26 +2,78 @@ Class {
 	#name : #'SSC_Action',
 	#superclass : #Object,
 	#instVars : [
-		'name'
+		'title',
+		'method',
+		'key'
 	],
 	#category : #SqueakShortcutConfiguration
 }
 
 {
-	#category : #'TODO!!!',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 12:56'
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 12:07'
 }
 SSC_Action >> = anAction [
 	^ (self species == anAction species) 
-		and: [self title = anAction title] "this has to be changed at some point"
+		and: [self hash = anAction hash]
 ]
 
 {
-	#category : #'TODO!!!',
-	#'squeak_changestamp' : 'JPVS 6/7/2024 12:59'
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:09'
 }
 SSC_Action >> hash [
-	^ self title hash"this has to be changed at some point"
+	^ [title. key. keyModifiers. method] hash
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:11'
+}
+SSC_Action >> key [
+	^ key
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:11'
+}
+SSC_Action >> key: aKey [
+	key := aKey
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:19'
+}
+SSC_Action >> matches: anEvent [
+	^ (key = anEvent keyCharacter) and: anEvent controlKeyPressed
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/18/2024 12:06'
+}
+SSC_Action >> method [
+	^ method
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/18/2024 22:11'
+}
+SSC_Action >> method: aSymbol [
+	method := aSymbol.
+	title ifNil: [title := method asString]
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:08'
+}
+SSC_Action >> performOn: anObject withEvent: anEvent [
+	"optionally pass the event as the first parameter"
+	anObject perform: method withEnoughArguments: {anEvent}.
 ]
 
 {
@@ -34,16 +86,16 @@ SSC_Action >> printOn: aStream [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 11:56'
+	#'squeak_changestamp' : 'MZ 6/18/2024 12:04'
 }
 SSC_Action >> title [
-	^ name
+	^ title
 ]
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 11:56'
+	#'squeak_changestamp' : 'MZ 6/18/2024 12:04'
 }
 SSC_Action >> title: aString [
-	name := aString
+	title := aString
 ]
