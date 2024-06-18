@@ -200,13 +200,13 @@ SSC_Test_API >> setUp [
 
 {
 	#category : #'setup-teardown',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 12:48'
+	#'squeak_changestamp' : 'JPVS 6/18/2024 19:56'
 }
 SSC_Test_API >> tearDown [
 	super tearDown.
 	
 	Smalltalk removeClassNamed: self classCreationNameOriginal.
-	Smalltalk removeClassNamed: self classCreationNameOther.
+	"Smalltalk removeClassNamed: self classCreationNameOther." "should not be neccessary, but if tests are broken this might help while troubleshooting"
 ]
 
 {

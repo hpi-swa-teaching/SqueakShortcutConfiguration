@@ -10,9 +10,9 @@ Class {
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 13:23'
+	#'squeak_changestamp' : 'JPVS 6/18/2024 19:54'
 }
-TestClass class >> sscActions [
+TestClass class >> actions2 [
 	Action1 ifNil: [Action1 := SSC_Action new title: 'Test Action 1'].
 	Action2 ifNil: [Action2 := SSC_Action new title: 'Test Action 2'].
 	^ {Action1. Action2}
