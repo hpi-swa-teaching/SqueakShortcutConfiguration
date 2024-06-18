@@ -167,7 +167,7 @@ SSC_API >> scan [
 	configurableClasses := {} asSet.
 	Smalltalk allClassesDo: [:aClass |
 		aClass class methodsDo: [:aMethod |
-			(self isActionProvider: aMethod) ifTrue: [self halt.self addActionProvider: aMethod].
+			(self isActionProvider: aMethod) ifTrue: [self addActionProvider: aMethod].
 		]
 	].
 ]
