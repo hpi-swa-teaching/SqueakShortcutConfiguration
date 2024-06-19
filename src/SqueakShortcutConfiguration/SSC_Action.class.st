@@ -11,7 +11,7 @@ Class {
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 12:07'
+	#'squeak_changestamp' : 'MZ 6/19/2024 11:18'
 }
 SSC_Action >> = anAction [
 	^ (self species == anAction species) 
@@ -20,10 +20,10 @@ SSC_Action >> = anAction [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 23:09'
+	#'squeak_changestamp' : 'MZ 6/19/2024 11:08'
 }
 SSC_Action >> hash [
-	^ [title. key. keyModifiers. method] hash
+	^ (title hash bitXor: key hash) bitXor: method hash
 ]
 
 {
@@ -78,10 +78,14 @@ SSC_Action >> performOn: anObject withEvent: anEvent [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'JPVS 6/4/2024 12:06'
+	#'squeak_changestamp' : 'MZ 6/19/2024 11:19'
 }
 SSC_Action >> printOn: aStream [
-	aStream nextPutAll: self title
+	aStream
+			nextPutAll: '(Ctrl+';
+			nextPutAll: self key asString;
+			nextPutAll: ')  ';
+			nextPutAll: self title.
 ]
 
 {
