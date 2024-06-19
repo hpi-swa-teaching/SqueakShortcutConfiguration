@@ -93,6 +93,14 @@ SSC_API >> actionsForClassNamed: aSymbol [
 ]
 
 {
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/19/2024 19:14'
+}
+SSC_API >> addAction: anAction forClass: aClass [
+	self setSSCActionsOfClass: aClass to: ((self sscActionsOfClass: aClass) add: anAction).
+]
+
+{
 	#category : #'action-providers',
 	#'squeak_changestamp' : 'JPVS 6/14/2024 12:20'
 }
@@ -207,11 +215,30 @@ SSC_API >> release [
 ]
 
 {
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/19/2024 19:16'
+}
+SSC_API >> removeAction: anAction fromClass: aClass [
+	|actions|
+	actions := (self sscActionsOfClass: aClass) reject: [:a | a = anAction].
+	self setSSCActionsOfClass: aClass to: actions
+]
+
+{
 	#category : #'action-providers',
 	#'squeak_changestamp' : 'JPVS 6/14/2024 12:22'
 }
 SSC_API >> removeActionProvider: aCompiledMethod [
 	configurableClasses remove: aCompiledMethod methodClass instanceSide.
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/19/2024 19:17'
+}
+SSC_API >> replaceAction: anAction with: newAction for: aClass [
+	self removeAction: anAction fromClass: aClass.
+	self addAction: newAction forClass: aClass
 ]
 
 {

@@ -3,7 +3,8 @@ Class {
 	#superclass : #Model,
 	#instVars : [
 		'classIndex',
-		'actionIndex'
+		'actionIndex',
+		'lastSelectedAction'
 	],
 	#category : #SqueakShortcutConfiguration
 }
@@ -22,6 +23,15 @@ SSC_ShortcutBrowser class >> windowLabel [
 ]
 
 {
+	#category : #'UI-callbacks',
+	#'squeak_changestamp' : 'MZ 6/19/2024 20:26'
+}
+SSC_ShortcutBrowser >> actionDoubleClicked [
+	"TODO: open dialogue to enter shortcut"
+	Transcript show: 'clicked on action '; show: (lastSelectedAction) ; cr.
+]
+
+{
 	#category : #accessing,
 	#'squeak_changestamp' : 'JPVS 5/23/2024 21:59'
 }
@@ -31,10 +41,13 @@ SSC_ShortcutBrowser >> actionIndex [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:59'
+	#'squeak_changestamp' : 'MZ 6/19/2024 20:26'
 }
 SSC_ShortcutBrowser >> actionIndex: anObject [
+	|action|
 	actionIndex := anObject.
+	action := self actionsListRepresentation at: anObject ifAbsent: [nil].
+	action ifNotNil: [lastSelectedAction := action].
 	self changed: #actionIndex.
 ]
 
@@ -139,17 +152,15 @@ SSC_ShortcutBrowser >> classNames [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 12:19'
+	#'squeak_changestamp' : 'MZ 6/19/2024 20:21'
 }
 SSC_ShortcutBrowser >> createActionsListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
 		list: #actionsListRepresentation;
-		keystrokePreview: #previewKeyStroke:forList:;
-		name: #actionsList;
 		getIndex: #actionIndex;
 		setIndex: #actionIndex:;
-		helpItem: #itemName:;
+		doubleClick: #actionDoubleClicked;
 		frame: self actionsListTransform;
 		yourself
 ]
@@ -169,20 +180,7 @@ SSC_ShortcutBrowser >> createButtonPanelSpecWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:43'
-}
-SSC_ShortcutBrowser >> createButtonSpecWith: aToolBuilder named: aString action: actionSymbol enabled: aSymbol [ 
-	^ aToolBuilder pluggableButtonSpec new
-		model: self;
-		label: aString;
-		action: actionSymbol;
-		enabled: aSymbol;
-		yourself
-]
-
-{
-	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 5/23/2024 21:41'
+	#'squeak_changestamp' : 'MZ 6/19/2024 19:42'
 }
 SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [ 
 	^ {
@@ -191,27 +189,26 @@ SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [
 		{'Reset globals' . #resetGlobalShortcutsForSelectedClass . nil} .
 		{'Reset all' . #resetShortcuts . nil}
 	} collect: [:each |
-		self
-			createButtonSpecWith: aToolBuilder
-			named: each first
-			action: each second
-			enabled: each third
+		aToolBuilder pluggableButtonSpec new
+		model: self;
+		label: each first;
+		action: each second;
+		enabled: each third;
+		yourself
 	]
 ]
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 12:20'
+	#'squeak_changestamp' : 'MZ 6/19/2024 19:36'
 }
 SSC_ShortcutBrowser >> createClassListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
 		list: #classNames;
-		keystrokePreview: #previewKeyStroke:forList:;
 		name: #classList;
 		getIndex: #classIndex; 
-		setIndex: #classIndex:; 
-		helpItem: #itemName:;
+		setIndex: #classIndex:;
 		frame: self classListTransform.
 ]
 
@@ -253,12 +250,11 @@ SSC_ShortcutBrowser >> initialize [
 ]
 
 {
-	#category : #todo,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 12:24'
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/19/2024 20:27'
 }
-SSC_ShortcutBrowser >> previewKeyStroke: aKeyboardEvent forList: aMorph [
-	"no idea what this is for, but returning false makes the preview work"
-	^ false
+SSC_ShortcutBrowser >> lastSelectedAction [
+	^ lastSelectedAction
 ]
 
 {
