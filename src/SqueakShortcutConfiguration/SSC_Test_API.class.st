@@ -109,10 +109,10 @@ SSC_Test_API >> executeActionProviderWrong [
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 6/14/2024 12:58'
+	#'squeak_changestamp' : 'MZ 6/19/2024 11:35'
 }
 SSC_Test_API >> nameActionProvider [
-	^ SSC_API actionProviderMethodName
+	^ SSC_API actionsGetterMethodName
 ]
 
 {
