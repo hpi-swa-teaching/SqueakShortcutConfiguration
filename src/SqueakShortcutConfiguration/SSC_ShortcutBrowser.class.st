@@ -24,10 +24,13 @@ SSC_ShortcutBrowser class >> windowLabel [
 
 {
 	#category : #'UI-callbacks',
-	#'squeak_changestamp' : 'MZ 6/19/2024 20:26'
+	#'squeak_changestamp' : 'yl 6/20/2024 20:19'
 }
 SSC_ShortcutBrowser >> actionDoubleClicked [
-	"TODO: open dialogue to enter shortcut"
+	| actionName dialog |
+	actionName := lastSelectedAction title.
+	dialog := self createShortcut: actionName.
+	dialog openInWorld.
 	Transcript show: 'clicked on action '; show: (lastSelectedAction) ; cr.
 ]
 
@@ -229,6 +232,58 @@ SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 		add: (self createActionsListSpecWith: aToolBuilder).
 	
 	^ mainPanel
+]
+
+{
+	#category : #default,
+	#'squeak_changestamp' : 'yl 6/20/2024 20:27'
+}
+SSC_ShortcutBrowser >> createShortcut: actionName [ 
+    | window msg body inputField scrollPane saveButton |
+    window := DialogWindow new openInHand title: 'Create a Shortcut for ', actionName;
+                     createButton: 'Cancel' value: false;
+                     exclusive: false;
+                     message: 'A simple input field to create your very own Shortcut';
+                     yourself.
+    "scroll pane creation and sizing"
+    body := window submorphNamed: 'Body'.
+    msg := body submorphNamed: 'Message'.
+    scrollPane := msg inAScrollPane.
+    scrollPane width: msg width + ScrollPane scrollBarThickness.
+    scrollPane color: body color.
+    body addMorph: scrollPane.
+
+    "Create and add the input field"
+    inputField := SSC_ShortcutInputMorph new.
+    inputField width: 500.
+    inputField height: 250.
+    inputField borderWidth: 1.
+    inputField balloonText: 'Your Shortcut here...'.
+    inputField borderColor: Color black.
+
+    "Position the input field below the message"
+    body addMorph: inputField.
+    inputField position: scrollPane bottomLeft + (0 @ 10).
+
+    "Create the Save button and define its action"
+    saveButton := PluggableButtonMorph new.
+    saveButton label: 'Save!'.
+    saveButton position: inputField bottomLeft + (0 @ 10).
+    saveButton target: [
+        | existingAction newAction api |
+        api := SSC_API uniqueInstance.
+        existingAction := (api actionsForClassNamed: actionName) detect: [:each | each title = actionName].
+        newAction := SSC_Action new.
+        newAction title: actionName.
+        newAction method: existingAction method.
+        newAction key: inputField shortcutText.
+        api replaceAction: existingAction with: newAction for: (Smalltalk classNamed: actionName).
+        window delete. "Close the window after saving"
+    ].
+    saveButton actionSelector: #value.
+    body addMorph: saveButton.
+
+    ^ window openInWorld.
 ]
 
 {
