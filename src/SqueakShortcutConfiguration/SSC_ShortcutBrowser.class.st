@@ -277,7 +277,7 @@ SSC_ShortcutBrowser >> lastSelectedAction [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/23/2024 17:54'
+	#'squeak_changestamp' : 'yl 6/23/2024 18:03'
 }
 SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
 
@@ -295,6 +295,7 @@ SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
 
     "Standardaktionen abrufen"
     defaultActions := selectedClass defaultSSCActions.
+    selectedClass SSCActions: defaultActions.
 
 
     "Aktualisieren der Aktionsliste"
