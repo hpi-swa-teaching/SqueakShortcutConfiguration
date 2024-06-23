@@ -67,12 +67,12 @@ SSC_ShortcutBrowser >> actions [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 12:10'
+	#'squeak_changestamp' : 'TJS 6/23/2024 16:03'
 }
 SSC_ShortcutBrowser >> actionsListRepresentation [
 	| collection |
 	collection := SortedCollection sortBlock: [:a :b | a title <= b title].
-	self actions do: [:each | collection add: each].
+	self actions do: [:each | each ifNotNil: [collection add: each]].
 	
 	^ collection
 ]
