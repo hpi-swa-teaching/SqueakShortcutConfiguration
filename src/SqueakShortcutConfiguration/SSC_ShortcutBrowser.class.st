@@ -9,13 +9,29 @@ Class {
 	#category : #SqueakShortcutConfiguration
 }
 
+{
+	#category : #default,
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
+}
+SSC_ShortcutBrowser class >> actionsListName [
+	^ #actionsList
+]
+
+{
+	#category : #default,
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
+}
+SSC_ShortcutBrowser class >> classListName [
+	^ #classList
+]
+
 { #category : #creation }
 SSC_ShortcutBrowser class >> open [
 	^ ToolBuilder open: self new
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #default,
 	#'squeak_changestamp' : 'JPVS 5/23/2024 22:01'
 }
 SSC_ShortcutBrowser class >> windowLabel [
@@ -153,11 +169,12 @@ SSC_ShortcutBrowser >> classNames [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'MZ 6/19/2024 20:21'
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
 }
 SSC_ShortcutBrowser >> createActionsListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
+		name: SSC_ShortcutBrowser actionsListName;
 		list: #actionsListRepresentation;
 		getIndex: #actionIndex;
 		setIndex: #actionIndex:;
@@ -201,13 +218,13 @@ SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'MZ 6/19/2024 19:36'
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
 }
 SSC_ShortcutBrowser >> createClassListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
+		name: SSC_ShortcutBrowser classListName;
 		list: #classNames;
-		name: #classList;
 		getIndex: #classIndex; 
 		setIndex: #classIndex:;
 		frame: self classListTransform.
