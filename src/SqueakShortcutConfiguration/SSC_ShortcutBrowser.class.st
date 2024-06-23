@@ -260,11 +260,11 @@ SSC_ShortcutBrowser >> lastSelectedAction [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/23/2024 17:45'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:54'
 }
 SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
 
-	| selectedClassName selectedClass defaultActions currentActions|
+	| selectedClassName selectedClass defaultActions|
 	
     self hasClassSelected ifFalse: [^ self inform: 'No class selected'].
 
@@ -275,8 +275,6 @@ SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
     (selectedClass respondsTo: #defaultSSCActions) ifFalse: [
         ^ self inform: selectedClassName, ' does not support default shortcuts reset.'
     ].
-
-    currentActions := SSC_API actionsForClassNamed: selectedClassName.
 
     "Standardaktionen abrufen"
     defaultActions := selectedClass defaultSSCActions.
@@ -300,7 +298,7 @@ SSC_ShortcutBrowser >> resetLocalShortcutsForSelectedClass [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/23/2024 17:12'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:55'
 }
 SSC_ShortcutBrowser >> resetShortcuts [
 
@@ -310,7 +308,7 @@ SSC_ShortcutBrowser >> resetShortcuts [
     classNamesToReset := SSC_API classNames.
 
     classNamesToReset do: [ :className |
-        | selectedClass defaultActions currentActions |
+        | selectedClass defaultActions |
 
         "Klasse nach Namen abrufen"
         selectedClass := Smalltalk classNamed: className.
@@ -320,9 +318,6 @@ SSC_ShortcutBrowser >> resetShortcuts [
             self inform: className, ' does not support default shortcuts reset.'.
              ^ nil "Weiter zur nächsten Klasse"
         ].
-
-        "Aktuelle Aktionen abrufen"
-        currentActions := SSC_API actionsForClassNamed: className.
 
         "Standardaktionen abrufen"
         defaultActions := selectedClass defaultSSCActions.
