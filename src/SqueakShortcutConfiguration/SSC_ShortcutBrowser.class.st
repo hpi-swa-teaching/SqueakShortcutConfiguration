@@ -277,7 +277,7 @@ SSC_ShortcutBrowser >> lastSelectedAction [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/23/2024 18:03'
+	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
 }
 SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
 
@@ -300,7 +300,6 @@ SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
 
     "Aktualisieren der Aktionsliste"
     self changed: #actionsListRepresentation.
-    self inform: 'Local shortcuts reset to default for ', selectedClassName.
 ]
 
 {
@@ -316,7 +315,7 @@ SSC_ShortcutBrowser >> resetLocalShortcutsForSelectedClass [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/23/2024 17:55'
+	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
 }
 SSC_ShortcutBrowser >> resetShortcuts [
 
@@ -344,7 +343,6 @@ SSC_ShortcutBrowser >> resetShortcuts [
 
     "Aktualisieren der Aktionsliste"
     self changed: #actionsListRepresentation.
-    self inform: 'All shortcuts reset to default for all classes.'
 ]
 
 {
