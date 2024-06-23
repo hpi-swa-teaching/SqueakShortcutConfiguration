@@ -1,5 +1,5 @@
 Class {
-	#name : #'SSC_Example',
+	#name : #'SSC_Example2',
 	#superclass : #Morph,
 	#classInstVars : [
 		'SSCActions'
@@ -9,9 +9,9 @@ Class {
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/23/2024 17:45'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:19'
 }
-SSC_Example class >> SSCActions [ 
+SSC_Example2 class >> SSCActions [ 
 	"Define this method to signal the SSC_ShortcutBrowser that this class has configurable shortcuts.
 	Return a set of SSC_Actions specifying the configurable actions and their currently configured shortcuts"
 	
@@ -23,7 +23,7 @@ SSC_Example class >> SSCActions [
 	#category : #'as yet unclassified',
 	#'squeak_changestamp' : 'MZ 6/18/2024 23:27'
 }
-SSC_Example class >> SSCActions: aCollection [
+SSC_Example2 class >> SSCActions: aCollection [
 	"Define this method to allow the SSC_ShortcutBrowser to update the configured shortcuts"
 	
 	SSCActions := aCollection
@@ -31,20 +31,20 @@ SSC_Example class >> SSCActions: aCollection [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/23/2024 17:52'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:51'
 }
-SSC_Example class >> defaultSSCActions [
+SSC_Example2 class >> defaultSSCActions [
 	"Return a set of SSC_Actions specifying the configurable actions and their default configured shortcuts"
 	
-	^ {	SSC_Action new method: #action1; key: $w. 
-		SSC_Action new method: #action2WithEventAsParameter:; key: $W}
+	^ {	SSC_Action new method: #action3; key: $c. 
+		SSC_Action new method: #action4WithEventAsParameter:; key: $C}
 ]
 
 {
 	#category : #actions,
 	#'squeak_changestamp' : 'MZ 6/18/2024 11:59'
 }
-SSC_Example >> action1 [
+SSC_Example2 >> action1 [
 	Transcript show: 'action1 called'; cr.
 ]
 
@@ -52,7 +52,7 @@ SSC_Example >> action1 [
 	#category : #actions,
 	#'squeak_changestamp' : 'MZ 6/18/2024 22:31'
 }
-SSC_Example >> action2WithEventAsParameter: anEvent [
+SSC_Example2 >> action2WithEventAsParameter: anEvent [
 	Transcript show: 'action2 called with event '; show: anEvent; cr.
 ]
 
@@ -60,7 +60,7 @@ SSC_Example >> action2WithEventAsParameter: anEvent [
 	#category : #'event-handling',
 	#'squeak_changestamp' : 'MZ 6/18/2024 22:19'
 }
-SSC_Example >> handlesKeyboard: anEvent [
+SSC_Example2 >> handlesKeyboard: anEvent [
 	^ true
 ]
 
@@ -68,7 +68,7 @@ SSC_Example >> handlesKeyboard: anEvent [
 	#category : #'event-handling',
 	#'squeak_changestamp' : 'MZ 6/18/2024 23:30'
 }
-SSC_Example >> keyStroke: anEvent [
+SSC_Example2 >> keyStroke: anEvent [
 	self class SSCActions do: [:action | 
 		(action matches: anEvent) ifTrue: [action performOn: self withEvent: anEvent]]
 ]

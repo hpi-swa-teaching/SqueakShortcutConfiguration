@@ -181,13 +181,13 @@ SSC_ShortcutBrowser >> createButtonPanelSpecWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'MZ 6/19/2024 19:42'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:17'
 }
 SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [ 
 	^ {
 		{'Help' . #openHelpMenu . nil} .
-		{'Reset locals' . #resetLocalShortcutsForSelectedClass . nil} .
-		{'Reset globals' . #resetGlobalShortcutsForSelectedClass . nil} .
+		{'Reset selected' . #resetLocalShortcutsForSelectedClass . nil} .
+		{'Reset class' . #resetGlobalShortcutsForSelectedClass . nil} .
 		{'Reset all' . #resetShortcuts . nil}
 	} collect: [:each |
 		aToolBuilder pluggableButtonSpec new
@@ -256,6 +256,82 @@ SSC_ShortcutBrowser >> initialize [
 }
 SSC_ShortcutBrowser >> lastSelectedAction [
 	^ lastSelectedAction
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'yl 6/23/2024 17:45'
+}
+SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
+
+	| selectedClassName selectedClass defaultActions currentActions|
+	
+    self hasClassSelected ifFalse: [^ self inform: 'No class selected'].
+
+    selectedClassName := self classNames at: self classIndex.
+    selectedClass := Smalltalk classNamed: selectedClassName.
+
+    "Prüfen, ob die ausgewählte Klasse die Methode defaultSSCActions implementiert"
+    (selectedClass respondsTo: #defaultSSCActions) ifFalse: [
+        ^ self inform: selectedClassName, ' does not support default shortcuts reset.'
+    ].
+
+    currentActions := SSC_API actionsForClassNamed: selectedClassName.
+
+    "Standardaktionen abrufen"
+    defaultActions := selectedClass defaultSSCActions.
+
+
+    "Aktualisieren der Aktionsliste"
+    self changed: #actionsListRepresentation.
+    self inform: 'Local shortcuts reset to default for ', selectedClassName.
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'yl 6/23/2024 17:51'
+}
+SSC_ShortcutBrowser >> resetLocalShortcutsForSelectedClass [
+ "TODO"
+	
+
+
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'yl 6/23/2024 17:12'
+}
+SSC_ShortcutBrowser >> resetShortcuts [
+
+| classNamesToReset |
+
+    "Klassen-Namen durch SSC_API abrufen"
+    classNamesToReset := SSC_API classNames.
+
+    classNamesToReset do: [ :className |
+        | selectedClass defaultActions currentActions |
+
+        "Klasse nach Namen abrufen"
+        selectedClass := Smalltalk classNamed: className.
+
+        "Prüfen, ob die Klasse die Methode defaultSSCActions implementiert"
+        (selectedClass respondsTo: #defaultSSCActions) ifFalse: [
+            self inform: className, ' does not support default shortcuts reset.'.
+             ^ nil "Weiter zur nächsten Klasse"
+        ].
+
+        "Aktuelle Aktionen abrufen"
+        currentActions := SSC_API actionsForClassNamed: className.
+
+        "Standardaktionen abrufen"
+        defaultActions := selectedClass defaultSSCActions.
+	  selectedClass SSCActions: defaultActions.
+].
+
+    "Aktualisieren der Aktionsliste"
+    self changed: #actionsListRepresentation.
+    self inform: 'All shortcuts reset to default for all classes.'
 ]
 
 {
