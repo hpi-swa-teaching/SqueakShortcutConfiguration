@@ -71,12 +71,13 @@ SSC_Dialog >> createButtonSpecsWith: aToolBuilder [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/22/2024 19:33'
+	#'squeak_changestamp' : 'MZ 6/23/2024 16:41'
 }
 SSC_Dialog >> createDialogSpecWith: aToolBuilder [
 
 	^ aToolBuilder pluggableDialogSpec new
 		model: self;
+		name: #sscDialog;
 		title: #title;
 		wantsResizeHandles: false;
 		children: OrderedCollection new;
