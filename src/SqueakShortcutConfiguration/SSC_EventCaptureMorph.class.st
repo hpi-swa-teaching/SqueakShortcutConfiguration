@@ -114,12 +114,12 @@ SSC_EventCaptureMorph >> initializeStyle [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'yl 6/22/2024 19:28'
+	#'squeak_changestamp' : 'MZ 6/23/2024 11:57'
 }
 SSC_EventCaptureMorph >> keyStroke: evt [ 
-
-	self eventKey: evt.
-	self contents: self eventAsString
+	evt controlKeyPressed
+		ifTrue: [self eventKey: evt. self contents: self eventAsString]
+		ifFalse: [self contents: 'Enter Ctrl-Shortcut']
 ]
 
 {
