@@ -21,24 +21,24 @@ TextEditor class >> SSCActions: aCollection [
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 21:03'
+	#'squeak_changestamp' : 'TJS 6/23/2024 22:38'
 }
 TextEditor class >> defaultSSCActions [
 
 	^	{
-			SSC_Action new method: #selectAll; key: $a.
-			SSC_Action new method: #copySelection; key: $c.
-			SSC_Action new method: #exchange; key: $e.
-			SSC_Action new method: #find; key: $f.
-			SSC_Action new method: #findAgain; key: $g.
-			SSC_Action new method: #doAgain; key: $j.
-			SSC_Action new method: #offerFontMenu; key: $k.
-			SSC_Action new method: #align; key: $u.
-			SSC_Action new method: #paste; key: $v.
-			SSC_Action new method: #backWord; key: $w.
-			SSC_Action new method: #cut; key: $x.
-			SSC_Action new method: #swapChars; key: $y.
-			SSC_Action new method: #undo; key: $z.
+			SSC_Action new method: #selectAll:; key: $a.
+			SSC_Action new method: #copySelection:; key: $c.
+			SSC_Action new method: #exchange:; key: $e.
+			SSC_Action new method: #find:; key: $f.
+			SSC_Action new method: #findAgain:; key: $g.
+			SSC_Action new method: #doAgain:; key: $j.
+			SSC_Action new method: #offerFontMenu:; key: $k.
+			SSC_Action new method: #align:; key: $u.
+			SSC_Action new method: #paste:; key: $v.
+			SSC_Action new method: #backWord:; key: $w.
+			SSC_Action new method: #cut:; key: $x.
+			SSC_Action new method: #swapChars:; key: $y.
+			SSC_Action new method: #undo:; key: $z.
 			
 			SSC_Action new method: #compareToClipboard; key: $C.
 			SSC_Action new method: #cursorTopHome; key: $H.
