@@ -24,14 +24,12 @@ SSC_ShortcutBrowser class >> windowLabel [
 
 {
 	#category : #'UI-callbacks',
-	#'squeak_changestamp' : 'yl 6/20/2024 20:19'
+	#'squeak_changestamp' : 'MZ 6/23/2024 11:50'
 }
 SSC_ShortcutBrowser >> actionDoubleClicked [
-	| actionName dialog |
-	actionName := lastSelectedAction title.
-	dialog := self createShortcut: actionName.
-	dialog openInWorld.
-	Transcript show: 'clicked on action '; show: (lastSelectedAction) ; cr.
+	| keyboardEvent |
+	keyboardEvent := SSC_EventCapturer getUserChoice.
+	keyboardEvent ifNotNil: [lastSelectedAction key: keyboardEvent keyCharacter]
 ]
 
 {
@@ -232,17 +230,6 @@ SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 		add: (self createActionsListSpecWith: aToolBuilder).
 	
 	^ mainPanel
-]
-
-{
-	#category : #default,
-	#'squeak_changestamp' : 'yl 6/22/2024 19:48'
-}
-SSC_ShortcutBrowser >> createShortcut: actionName [ 
-	|eventKey|    
-
-    "Create and add the input field"
-    eventKey := SSC_EventCapturer getUserChoice.
 ]
 
 {
