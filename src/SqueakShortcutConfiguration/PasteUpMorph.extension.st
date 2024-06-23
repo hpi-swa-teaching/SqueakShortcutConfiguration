@@ -33,3 +33,15 @@ PasteUpMorph class >> defaultSSCActions [
 			SSC_Action new method: #snapshotIfLegacyShortcutsEnabled; key: $].
 	 	}	
 ]
+
+{
+	#category : #'*SqueakShortcutConfiguration-overrides',
+	#'squeak_changestamp' : 'TJS 6/23/2024 15:19'
+}
+PasteUpMorph >> tryInvokeKeyboardShortcut: aKeyboardEvent [
+
+    aKeyboardEvent commandKeyPressed ifFalse: [^ self].
+    
+    self class SSCActions do: [:action | (action key = aKeyboardEvent key) ifTrue: [self perform: action method. aKeyboardEvent ignore]].
+            
+]
