@@ -2,53 +2,56 @@ Extension { #name : #TextEditor }
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 19:10'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:46'
 }
 TextEditor class >> SSCActions [
-
-	SSCActions ifNil: [SSCActions := self defaultSSCActions].
-	^ SSCActions
+	^ self cmdMapToActionsList: cmdActions
 ]
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 19:09'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:52'
 }
-TextEditor class >> SSCActions: aCollection [
-
-	SSCActions := aCollection
+TextEditor class >> SSCActions: newActions [
+	|actionsByMethod|
+	actionsByMethod := Dictionary new.
+	self SSCActions do: [:action | actionsByMethod at: action method put: action ].
+	newActions do: [:action | actionsByMethod at: action method put: action ].
+	
+	cmdActions := self actionsListToCmdMap: actionsByMethod values
 ]
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/23/2024 22:38'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:45'
 }
 TextEditor class >> defaultSSCActions [
+	|cmdMap cmds actions|
+	
+	actions := super defaultSSCActions asSet.
 
-	^	{
-			SSC_Action new method: #selectAll:; key: $a.
-			SSC_Action new method: #copySelection:; key: $c.
-			SSC_Action new method: #exchange:; key: $e.
-			SSC_Action new method: #find:; key: $f.
-			SSC_Action new method: #findAgain:; key: $g.
-			SSC_Action new method: #doAgain:; key: $j.
-			SSC_Action new method: #offerFontMenu:; key: $k.
-			SSC_Action new method: #align:; key: $u.
-			SSC_Action new method: #paste:; key: $v.
-			SSC_Action new method: #backWord:; key: $w.
-			SSC_Action new method: #cut:; key: $x.
-			SSC_Action new method: #swapChars:; key: $y.
-			SSC_Action new method: #undo:; key: $z.
+	cmdMap := Array new: 256 withAll: #noop:.		"use temp in case of a crash"
+	cmdMap at: 1 + 1 put: #cursorHome:.				"home key"
+	cmdMap at: 4 + 1 put: #cursorEnd:.				"end key"
+	cmdMap at: 8 + 1 put: #backspace:.				"ctrl-H or delete key"
+	cmdMap at: 11 + 1 put: #cursorPageUp:.			"page up key"
+	cmdMap at: 12 + 1 put: #cursorPageDown:.		"page down key"
+	cmdMap at: 13 + 1 put: #crWithIndent:.			"cmd-Return"
+	cmdMap at: 27 + 1 put: #offerMenuFromEsc:.		"escape key"
+	cmdMap at: 28 + 1 put: #cursorLeft:.				"left arrow key"
+	cmdMap at: 29 + 1 put: #cursorRight:.				"right arrow key"
+	cmdMap at: 30 + 1 put: #cursorUp:.				"up arrow key"
+	cmdMap at: 31 + 1 put: #cursorDown:.				"down arrow key"
+	cmdMap at: 32 + 1 put: #selectWord:.				"space bar key"
+	cmdMap at: 127 + 1 put: #forwardDelete:.		"del key"
 			
-			SSC_Action new method: #compareToClipboard; key: $C.
-			SSC_Action new method: #cursorTopHome; key: $H.
-			SSC_Action new method: #doAgainUpToEnd; key: $J.
-			SSC_Action new method: #changeStyle; key: $K.
-			SSC_Action new method: #selectCurrentTypeIn; key: $M.
-			SSC_Action new method: #findAgain; key: $S.
-			SSC_Action new method: #changeLfToCr; key: $U.
-			SSC_Action new method: #makeLowercase; key: $X.
-			SSC_Action new method: #makeUppercase; key: $Y.
-			SSC_Action new method: #redo; key: $Z.
-		}
+	'0123456789' 
+		do: [:char | cmdMap at: char asciiValue + 1 put: #changeEmphasis:].
+	
+	cmds := #($a #selectAll: $c #copySelection: $e #exchange: $f #find: $g #findAgain: $j #doAgain: $k #offerFontMenu: $u #align: $v #paste: $w #backWord: $x #cut: $y #swapChars: $z #undo:).
+	1 to: cmds size
+		by: 2
+		do: [:i | cmdMap at: (cmds at: i) asciiValue + 1 put: (cmds at: i + 1)].
+	
+	^ self cmdMapToActionsList: cmdMap
 ]

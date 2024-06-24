@@ -2,30 +2,33 @@ Extension { #name : #Editor }
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 21:16'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:57'
 }
-Editor class >> SSCActions [
-
-	SSCActions ifNil: [SSCActions := self defaultSSCActions].
-	^ SSCActions
+Editor class >> actionsListToCmdMap: actionsList [
+	|cmdMap|
+	cmdMap := Dictionary new.
+	actionsList do: [:action | cmdMap at: (action key asciiValue +1) put: action method ].
+	1 to: 255 do: [:i | cmdMap at: i ifAbsentPut: #noop: ].
+	^ cmdMap
 ]
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 21:16'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:54'
 }
-Editor class >> SSCActions: aCollection [
-
-	SSCActions := aCollection
+Editor class >> cmdMapToActionsList: cmdMap [
+	|actions|
+	actions := {} asSet.
+	cmdMap keysAndValuesDo: [:asciiValue :method |
+		(method = #noop:) ifFalse: [actions add: (SSC_Action new key: (asciiValue -1) asCharacter; method: method)]].
+	^ actions
 ]
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 21:18'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:30'
 }
 Editor class >> defaultSSCActions [
 
-	^ 	{
-			
-		}	
+	^ 	{}
 ]

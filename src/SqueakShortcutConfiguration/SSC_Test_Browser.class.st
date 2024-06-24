@@ -44,7 +44,7 @@ SSC_Test_Browser >> tearDown [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/23/2024 17:26'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:23'
 }
 SSC_Test_Browser >> testActionsEditing [
 	|event|
@@ -53,12 +53,12 @@ SSC_Test_Browser >> testActionsEditing [
 	
 	"automatically submit the dialog"
 	[ |eventCapturer|
-		100 milliSeconds busyWait.
+		200 milliSeconds busyWait.
 		eventCapturer := (World submorphNamed: #sscDialog) model.
 		eventCapturer captureMorph eventKey: event.
 		eventCapturer accept] fork.
 
-	browser classIndex: 1.
+	browser classIndex: (browser classNames indexOf: 'SSC_Example').
 	browser actionIndex: 1.
 	browser actionDoubleClicked.
 	
@@ -70,10 +70,10 @@ SSC_Test_Browser >> testActionsEditing [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/23/2024 15:47'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:23'
 }
 SSC_Test_Browser >> testActionsListContents [
-	browser classIndex: 1.
+	browser classIndex: (browser classNames indexOf: 'SSC_Example').
 	self assert: (SSC_Example SSCActions allSatisfy: [:action | self actionsListMorph getList includes: action]).
 ]
 
