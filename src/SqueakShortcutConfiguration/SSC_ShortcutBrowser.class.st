@@ -40,12 +40,15 @@ SSC_ShortcutBrowser class >> windowLabel [
 
 {
 	#category : #'UI-callbacks',
-	#'squeak_changestamp' : 'MZ 6/23/2024 11:50'
+	#'squeak_changestamp' : 'MZ 6/23/2024 23:19'
 }
 SSC_ShortcutBrowser >> actionDoubleClicked [
 	| keyboardEvent |
 	keyboardEvent := SSC_EventCapturer getUserChoice.
-	keyboardEvent ifNotNil: [lastSelectedAction key: keyboardEvent keyCharacter]
+	keyboardEvent ifNotNil: [ |newAction| 
+		newAction := SSC_Action new key: keyboardEvent keyCharacter; method: lastSelectedAction method; title: lastSelectedAction title.
+		SSC_API uniqueInstance replaceAction: lastSelectedAction with: newAction for: self selectedClass].
+	self changed: #actionsListRepresentation.
 ]
 
 {
@@ -354,12 +357,11 @@ SSC_ShortcutBrowser >> rightPanelTransform [
 ]
 
 {
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'JPVS 5/23/2024 22:04'
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/23/2024 23:05'
 }
-SSC_ShortcutBrowser >> update: aSymbol [
-	self halt.
-	self notYetImplemented.
+SSC_ShortcutBrowser >> selectedClass [
+	^ Smalltalk classNamed: (self classNames at: self classIndex ifAbsent: [^ nil])
 ]
 
 {
