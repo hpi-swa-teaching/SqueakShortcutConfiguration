@@ -1,0 +1,166 @@
+#+include: ./templates/slidehead.org
+#+beamer_header: \title[Squeak Shortcut Configuration]{Projektgespräch: Squeak Shortcut Configuration}
+#+beamer_header: \author[YL, MG, TS, JS, MZ]{Yannik Lehnhardt,  Moritz Grimm, Tom Schneider, Jann Stute, Mathis Zscheischler}
+#+beamer_header: \date{2024-07-03}
+
+#+begin_export latex
+\begin{frame}[title={bg=Hauptgebaeude_Tag.jpg}]
+ \maketitle
+\end{frame}
+#+end_export
+
+* Projekt
+#+attr_beamer: :overlay +-
+*** Anforderungen
+**** Must-have
+- Zentrale Stelle zur Konfiguration von Keyboard-Shortcuts
+  - Anzeige und Konfiguration
+- Integration mit wichtigen Kernel-Klassen
+  - \texttt{PasteUpMorph},\texttt{TextEditor}, \texttt{SmalltalkEditor}, \texttt{SystemWindow}, \texttt{Editor} 
+**** Should have
+- API für Nutzerklassen, um Shortcuts für Dritt-Packages integrieren zu können
+  - Beispielklasse zur Illustration
+- Hilfetexte für Nutzer, der Shortcut-System erklärt
+- Standard-Shortcuts und Reset der Nutzerkonfiguration
+**** Could have
+- Nutzerdefinierte Closures, die durch Shortcuts ausgeführt werden können
+*** Legacy
+- Altprojekt \texttt{Actions}
+  - sehr fehlerbehaftet, im Kern nicht funktionsfähig
+    - viele Tests schlagen fehl
+  - strukturell komplex \(\not\rightarrow\) Simple Design!
+  - gute GUI \(\rightarrow\) übernommen!
+*** Demo
+#+caption: Shortcut Browser
+#+attr_latex: :width 0.8\textwidth
+[[file:figures/shortcut_browser.png]]
+
+** Architektur
+*** Architektur
+#+caption: Klassendiagramm \texttt{SqueakShortcutConfiguration}
+#+attr_latex: :width .95\textwidth
+[[file:figures/class_diagram.pdf]]
+* Entwicklungsprozess
+*** Vorkenntnisse
+- Zusammenschluss zweier Teilgruppen aus SWA
+- Keine Vorerfahrungen mit Shortcuts oder Squeak-Kernel
+- Keine Vorerfahrungen mit XP
+- Volle Terminkalender \(\leadsto\) größtenteils asynchrone Kommunikation
+
+*** Planung & Kundenzusammenarbeit
+- Kundentreffen alle zwei Wochen
+  - internes Team-Meeting immer im Anschluss
+  - Zweiwöchige Sprints, um Terminkoordination zu vereinfachen
+- Startschwierigkeiten wg. verspäteter Bereitstellung des Legacy-Projekts
+
+*Stand 2024-06-23*: MVP- und Großteil der Should-have-Stories implementiert
+
+*** User Stories
+- relativ ,,grob'', größere Funktionseinheiten gerade zu Beginn
+  - z.B. Shortcut-API, Überblick aller konfigurierter Shortcuts
+  - standen von Beginn an fest
+- Abhängigkeiten in Planung
+  - Beispiel: API muss zuerst bestehen, um Kernelklassen patchen zu können
+- Schätzungen nach ,,Planning Poker''
+  - Ziel: 21 Punkte pro Sprint
+  - in praxi: Schätzungen zwar in Größenordnung korrekt, aber zu ungenau für Zeitplanung \newline \(\leadsto\) Sprint-Grenzen verschwimmen
+    
+**** Insgesamt...
+- 9 User Stories (davon 6 abgeschlossen)
+- 98 Punkte (davon 53 abgeschlossen)
+*** Sprints
+**** Sprint 1: KW 21-22
+- Overview of configured shortcuts \hfill  *8P*
+- API for shortcut registry \hfill *13P*
+**** Sprint 2: KW 23-24
+- Beispielklasse \hfill *3P*
+- Change Listening \hfill *13P*
+**** Sprint 3: KW 25-26
+- Kernel-Klassen patchen \hfill *21P*
+- begleitend: Refactoring der API
+**** Sprint 4: KW 27-28 (in Planung)
+- Eigene Shortcut-Closures \hfill *21P*
+*** Testabdeckung
+- derzeit 7 Testmethoden (4 API, 3 Browser); damit 85% Abdeckung
+- Für Kernelklassen-Patches schwierig umzusetzen
+*** Zeitaufwand
+**** 
+#+latex_header: \usepackage{pgf-pie}
+#+caption: Disclaimer: Geschätzt, nicht gestoppt!
+#+begin_export latex
+\begin{tikzpicture}
+  \pie[sum=auto, color={hpired!80, hpiyellow!80, hpiorange!80, hpigreen!80}]{6/Meetings, 4/Asynchrone Koordination und Planung, 15/Vortragsvorbereitung, 90/Coding und Testing}
+\end{tikzpicture}
+#+end_export
+
+** Simple Design
+*** Simple Design: Architekturentscheidungen
+**** Reduktion auf minimale Komplexitiät
+- *Konfiguration* der Shortcuts, nicht Handling
+- Shortcut-Registry als Singleton
+- API mit wenigen Methoden
+- \texttt{Action} besteht aus nur drei Attributen: \texttt{key, method, title}
+
+Erfüllt die Kriterien /Testability/, /Understandability/, /Browsability/ und /Explanability/!
+**** Integration von Kernel-Klassen
+Kernelklassen implementieren Shortcuts teils sehr unterschiedlich.
+*\(\rightarrow\) Simple Design* individuelle Patches, um Konformität mit API herzustellen
+
+\pause
+*\(\leadsto\)* Notwendige Änderungen an API-Entwurf, um Komplexität in Patches zu kontrollieren 
+*** Simple Design: Challenges
+- Bereits erwähnt: Abhängigkeiten zwischen User Stories
+  - nach ,,strengem'' Simple Design: Erst Kernelklassen-Shortcuts in UI integrieren, dann später API für Nutzerklassen bereitstellen \newline *\(\leadsto\) /ad-hoc/-Lösungen, vermeidbare Arbeit!*
+- Einigung im Team: Bearbeitung in Abhängigkeitsreihenfolge
+** Collective Code Ownership
+*** Collective Code Ownership: Challenges
+Bestandssystem ist uneinheitlich; Kernelklassen implementieren Shortcuts auf verschiedene Weisen
+
+\(\leadsto\) Codeverständlichkeit suboptimal
+
+****                                                          :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.48
+:BEAMER_env: block
+:END:
+#+caption: Implementierung in \texttt{TextEditor}
+#+attr_latex: :width \textwidth
+[[file:figures/shortcuts_seditor.png]]
+
+****                                                          :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_col: 0.48
+:BEAMER_env: block
+:END:
+#+caption: Implementierung in \texttt{PasteUpMorph}
+#+attr_latex: :width \textwidth
+[[file:figures/shortcuts_pastupmorph.png]]
+
+*** Coding Standards, or rather: the lack thereof
+#+caption: Eins- oder Null-Indizierung?
+#+attr_latex: :width 0.8\textwidth
+[[file:figures/one-index.png]]
+
+- Historisch gewachsenes System: Kernel-Methoden folgen keinem einheitlichen Style Guide
+- Struktur von Klassen wie \texttt{SmalltalkEditor} müsste teils erheblich geändert werden, um Patches konform umzusetzen
+  - Aber Änderungen an Kernelklassen sollten minimal gehalten werden
+
+\(\leadsto\) Wir passen uns an und adaptieren die API
+
+*** Collective Code Ownership: Testing
+- Bewusste Entscheidung gegen /test-driven development/
+  - Wenig aus Legacy-Projekt übernommen, daher wenig iterative Entwicklung
+  - Spezifikation der API nicht stabil $\rightarrow$ Testentwicklung wäre sehr ineffizient gewesen
+
+* Reflexion
+*** Reflexion
+- Organisation von Sprints nicht trivial
+  - Abhängigkeiten und daraus entstehende Refactorings zeitraubend
+  - Zeitaufwands-Schätzung ungenau, insbesondere bei Interaktion mit Bestandscode
+  - viel empfundener Overhead
+- Asynchrone Koordination genügt zumeist
+  - weniger Meetings, weniger Zeitaufwand, weniger Terminkonflikte
+  - Nachteil: Koordination von gemeinsamer Arbeit an einer Story erschwert
+- /Test-driven development/ praktisch schwierig, da sich Anforderungen ändern
+- /Collective Code Ownership/ wäre toll, wenn einheitliche Standards eingehalten würden.
+  - Aber schwierig im Kontext des Kernels, der keinem ebensolchen folgt!
