@@ -1,66 +1,70 @@
 Extension { #name : #PasteUpMorph }
 
 {
-	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 18:18'
+	#category : #'*SqueakShortcutConfiguration-API',
+	#'squeak_changestamp' : 'MZ 6/23/2024 22:35'
 }
 PasteUpMorph class >> SSCActions [
-
-	SSCActions ifNil: [SSCActions := self defaultSSCActions].
-	^ SSCActions
+	|sscActions|
+	sscActions := {} asSet.
+	ActiveWorld commandKeySelectors keysAndValuesDo: [:key :value | sscActions add: (SSC_Action new key: key; title: (self cmdSelectorTitleFromMessageSend: value))].
+	^ sscActions
 ]
 
 {
-	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/22/2024 18:17'
+	#category : #'*SqueakShortcutConfiguration-API',
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:08'
 }
-PasteUpMorph class >> SSCActions: aCollection [
-
-	SSCActions := aCollection
+PasteUpMorph class >> SSCActions: newActions [
+	|defaultKeysByTitle keysByTitle newCmdSelectors|
+	keysByTitle := Dictionary new.
+	defaultKeysByTitle := Dictionary new.
+	newCmdSelectors := Dictionary new.
+	
+	"(newActions anySatisfy: [:action | action title = 'Save the image.']) ifTrue: [self halt]."
+	
+	self defaultSSCActions do: [:action | keysByTitle at: action title put: action key. defaultKeysByTitle at: action title put: action key ].
+	newActions do: [:action | keysByTitle at: action title put: action key ].
+	
+	keysByTitle keysAndValuesDo: [:title :key | |messageSend|
+		messageSend := self defaultCommandKeySelectors at: (defaultKeysByTitle at: title).
+		newCmdSelectors at: key put: messageSend.
+	].
+	
+	PasteUpMorph allInstances do: [:instance | instance setProperty: #commandKeySelectors toValue: newCmdSelectors ]
 ]
 
 {
-	#category : #'*SqueakShortcutConfiguration-extensions',
-	#'squeak_changestamp' : 'TJS 6/23/2024 15:28'
+	#category : #'*SqueakShortcutConfiguration-API',
+	#'squeak_changestamp' : 'MZ 6/23/2024 22:35'
 }
-PasteUpMorph >> browseRecentSubmissions [
-
-	Utilities browseRecentSubmissions
+PasteUpMorph class >> cmdSelectorTitleFromMessageSend: aMessageSend [
+	"PasteUpMorph>>initializeDesktopCommandKeySelectors only saves a key and a MessageSend object. We need the action title from defaultDesktopCommandKeyTriplets though."
+	
+	ActiveWorld defaultDesktopCommandKeyTriplets do: [:trip | 
+		((trip second = aMessageSend receiver) and: (trip third = aMessageSend selector)) ifTrue: [ ^ trip fourth ]].
+	
+	^ aMessageSend receiver asString, ' ', aMessageSend selector asString
 ]
 
 {
-	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/23/2024 15:44'
+	#category : #'*SqueakShortcutConfiguration-API',
+	#'squeak_changestamp' : 'MZ 6/23/2024 23:43'
+}
+PasteUpMorph class >> defaultCommandKeySelectors [
+	| dict |
+	dict := IdentityDictionary new.
+	ActiveWorld defaultDesktopCommandKeyTriplets do: [:trip |
+		| messageSend |
+		messageSend := MessageSend receiver: trip second selector: trip third.
+		dict at: trip first put: messageSend].
+	^ dict
+]
+
+{
+	#category : #'*SqueakShortcutConfiguration-API',
+	#'squeak_changestamp' : 'MZ 6/23/2024 22:55'
 }
 PasteUpMorph class >> defaultSSCActions [
-
-	^ 	{
-			SSC_Action new method: #browseRecentSubmissions; key: $R.
-			SSC_Action new method: #findAFileList:; key: $L.
-			SSC_Action new method: #findAMonticelloBrowser; key: $O.
-			SSC_Action new method: #findAPreferencesPanel:; key: $P.
-			
-			LegacyShortcutsFilter legacyShortcutsEnabled
-			ifTrue:  [SSC_Action new method: #snapshotIfLegacyShortcutsEnabled; key: $M.]
-	 	}	
-]
-
-{
-	#category : #'*SqueakShortcutConfiguration-extensions',
-	#'squeak_changestamp' : 'TJS 6/23/2024 15:50'
-}
-PasteUpMorph >> snapshotIfLegacyShortcutsEnabled [
-
-	Smalltalk snapshot: true andQuit: false
-]
-
-{
-	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'TJS 6/23/2024 15:51'
-}
-PasteUpMorph >> tryInvokeKeyboardShortcut: aKeyboardEvent [
-
-    aKeyboardEvent commandKeyPressed ifFalse: [^ self].
-    
-    self class SSCActions do: [:action | action ifNotNil: [(action matches: aKeyboardEvent) ifTrue: [action performOn: self withEvent: aKeyboardEvent. aKeyboardEvent ignore]]]
+	^ ActiveWorld defaultDesktopCommandKeyTriplets collect: [:trip | SSC_Action new key: trip first; title: trip fourth ]
 ]

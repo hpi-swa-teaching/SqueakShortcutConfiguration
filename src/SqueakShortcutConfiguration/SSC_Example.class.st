@@ -9,9 +9,9 @@ Class {
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 23:26'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:45'
 }
-SSC_Example class >> SSCActions [
+SSC_Example class >> SSCActions [ 
 	"Define this method to signal the SSC_ShortcutBrowser that this class has configurable shortcuts.
 	Return a set of SSC_Actions specifying the configurable actions and their currently configured shortcuts"
 	
@@ -31,13 +31,13 @@ SSC_Example class >> SSCActions: aCollection [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 23:26'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:52'
 }
 SSC_Example class >> defaultSSCActions [
 	"Return a set of SSC_Actions specifying the configurable actions and their default configured shortcuts"
 	
-	^ {	SSC_Action new method: #action1; key: $a. 
-		SSC_Action new method: #action2WithEventAsParameter:; key: $A}
+	^ {	SSC_Action new method: #action1; key: $w. 
+		SSC_Action new method: #action2WithEventAsParameter:; key: $W}
 ]
 
 {

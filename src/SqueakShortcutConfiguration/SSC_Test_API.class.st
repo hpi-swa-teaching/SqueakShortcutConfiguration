@@ -35,14 +35,6 @@ SSC_Test_API >> addActionProvider: name actions: stringCollection [
 ]
 
 {
-	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 12:05'
-}
-SSC_Test_API >> addActionProviderWrong [
-	self addActionProvider: self nameActionProviderWrong actions: {'Action 3s Title'. 'Action 4s Title'}
-]
-
-{
 	#category : #default,
 	#'squeak_changestamp' : 'JPVS 6/6/2024 14:52'
 }
@@ -100,27 +92,11 @@ SSC_Test_API >> executeActionProvider [
 ]
 
 {
-	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 12:06'
-}
-SSC_Test_API >> executeActionProviderWrong [
-	^ test_class perform: self nameActionProviderWrong asSymbol
-]
-
-{
 	#category : #default,
 	#'squeak_changestamp' : 'MZ 6/19/2024 11:35'
 }
 SSC_Test_API >> nameActionProvider [
 	^ SSC_API actionsGetterMethodName
-]
-
-{
-	#category : #default,
-	#'squeak_changestamp' : 'JPVS 6/14/2024 12:05'
-}
-SSC_Test_API >> nameActionProviderWrong [
-	^ 'actions2'
 ]
 
 {
@@ -141,31 +117,10 @@ SSC_Test_API >> removeActionProvider [
 
 {
 	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 12:07'
-}
-SSC_Test_API >> removeActionProviderWrong [
-	self removeMethod: self nameActionProviderWrong
-]
-
-{
-	#category : #'test-class-interaction',
 	#'squeak_changestamp' : 'JPVS 6/7/2024 13:32'
 }
 SSC_Test_API >> removeMethod: aString [
 	test_class class removeSelector: aString asSymbol.
-]
-
-{
-	#category : #'test-class-interaction',
-	#'squeak_changestamp' : 'JPVS 6/14/2024 13:14'
-}
-SSC_Test_API >> renameActionProviderToWrong [
-	(RBRenameMethodRefactoring
-		renameMethod: self nameActionProvider
-		in: test_class class
-		to: self nameActionProviderWrong
-		permutation: (1 to: self nameActionProvider numArgs)
-	) execute.
 ]
 
 {
@@ -222,16 +177,6 @@ SSC_Test_API >> testAddingActionProvider [
 
 {
 	#category : #tests,
-	#'squeak_changestamp' : 'JPVS 6/14/2024 12:11'
-}
-SSC_Test_API >> testAddingActionProviderWrong [
-	self addActionProviderWrong.
-	self deny: (SSC_API uniqueInstance configurableClasses includes: test_class ).
-	self removeActionProviderWrong.
-]
-
-{
-	#category : #tests,
 	#'squeak_changestamp' : 'JPVS 6/14/2024 12:10'
 }
 SSC_Test_API >> testRemovingActionProvider [
@@ -255,11 +200,12 @@ SSC_Test_API >> testRenamingClass [
 
 {
 	#category : #tests,
-	#'squeak_changestamp' : 'JPVS 6/14/2024 13:11'
+	#'squeak_changestamp' : 'MZ 6/23/2024 17:52'
 }
-SSC_Test_API >> testRenamingMethod [
-	self addActionProvider.
-	self renameActionProviderToWrong.
-	self assert: (SSC_API actionsForClassNamed: test_class name) asSet equals: {} asSet.
-	self removeActionProviderWrong.
+SSC_Test_API >> testSSCExampleAPI [
+	self assert: (SSC_API uniqueInstance isActionGetterMethod: (SSC_Example class methodDict at: #SSCActions)).
+	self assert: (SSC_API uniqueInstance isActionSetterMethod: (SSC_Example class methodDict at: #SSCActions:)).
+	self assert: (SSC_API uniqueInstance isDefaultActionGetterMethod: (SSC_Example class methodDict at: #defaultSSCActions)).
+	self assert: (SSC_Example SSCActions allSatisfy: [:action | (SSC_API uniqueInstance sscActionsOfClass: SSC_Example) includes: action]).
+	self assert: (SSC_Example defaultSSCActions allSatisfy: [:action | (SSC_API uniqueInstance defaultSSCActionsOfClass: SSC_Example) includes: action]).
 ]

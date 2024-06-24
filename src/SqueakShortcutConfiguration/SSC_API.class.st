@@ -94,10 +94,13 @@ SSC_API >> actionsForClassNamed: aSymbol [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'MZ 6/19/2024 19:14'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:10'
 }
 SSC_API >> addAction: anAction forClass: aClass [
-	self setSSCActionsOfClass: aClass to: ((self sscActionsOfClass: aClass) add: anAction).
+	|newActions|
+	newActions := (self sscActionsOfClass: aClass).
+	newActions add: anAction.
+	self setSSCActionsOfClass: aClass to: newActions.
 ]
 
 {
@@ -234,11 +237,13 @@ SSC_API >> removeActionProvider: aCompiledMethod [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'MZ 6/19/2024 19:17'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:07'
 }
 SSC_API >> replaceAction: anAction with: newAction for: aClass [
-	self removeAction: anAction fromClass: aClass.
-	self addAction: newAction forClass: aClass
+	|newActions|
+	newActions := (self sscActionsOfClass: aClass) reject: [:a | a = anAction].
+	newActions add: newAction.
+	self setSSCActionsOfClass: aClass to: newActions
 ]
 
 {
@@ -256,16 +261,16 @@ SSC_API >> scan [
 
 {
 	#category : #helpers,
-	#'squeak_changestamp' : 'MZ 6/19/2024 11:43'
+	#'squeak_changestamp' : 'MZ 6/23/2024 23:10'
 }
 SSC_API >> setSSCActionsOfClass: aClass to: aCollection [
-	aClass perform: (SSC_API actionsSetterMethodName) with: nil
+	aClass perform: (SSC_API actionsSetterMethodName) with: aCollection
 ]
 
 {
 	#category : #helpers,
-	#'squeak_changestamp' : 'MZ 6/19/2024 11:44'
+	#'squeak_changestamp' : 'MZ 6/24/2024 09:10'
 }
 SSC_API >> sscActionsOfClass: aClass [
-	^ aClass perform: (SSC_API actionsGetterMethodName)
+	^ (aClass perform: (SSC_API actionsGetterMethodName)) asSet
 ]

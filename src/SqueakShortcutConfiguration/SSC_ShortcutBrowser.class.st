@@ -9,13 +9,29 @@ Class {
 	#category : #SqueakShortcutConfiguration
 }
 
+{
+	#category : #default,
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
+}
+SSC_ShortcutBrowser class >> actionsListName [
+	^ #actionsList
+]
+
+{
+	#category : #default,
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
+}
+SSC_ShortcutBrowser class >> classListName [
+	^ #classList
+]
+
 { #category : #creation }
 SSC_ShortcutBrowser class >> open [
 	^ ToolBuilder open: self new
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #default,
 	#'squeak_changestamp' : 'JPVS 5/23/2024 22:01'
 }
 SSC_ShortcutBrowser class >> windowLabel [
@@ -24,14 +40,15 @@ SSC_ShortcutBrowser class >> windowLabel [
 
 {
 	#category : #'UI-callbacks',
-	#'squeak_changestamp' : 'yl 6/20/2024 20:19'
+	#'squeak_changestamp' : 'MZ 6/23/2024 23:19'
 }
 SSC_ShortcutBrowser >> actionDoubleClicked [
-	| actionName dialog |
-	actionName := lastSelectedAction title.
-	dialog := self createShortcut: actionName.
-	dialog openInWorld.
-	Transcript show: 'clicked on action '; show: (lastSelectedAction) ; cr.
+	| keyboardEvent |
+	keyboardEvent := SSC_EventCapturer getUserChoice.
+	keyboardEvent ifNotNil: [ |newAction| 
+		newAction := SSC_Action new key: keyboardEvent keyCharacter; method: lastSelectedAction method; title: lastSelectedAction title.
+		SSC_API uniqueInstance replaceAction: lastSelectedAction with: newAction for: self selectedClass].
+	self changed: #actionsListRepresentation.
 ]
 
 {
@@ -155,11 +172,12 @@ SSC_ShortcutBrowser >> classNames [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'MZ 6/19/2024 20:21'
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
 }
 SSC_ShortcutBrowser >> createActionsListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
+		name: SSC_ShortcutBrowser actionsListName;
 		list: #actionsListRepresentation;
 		getIndex: #actionIndex;
 		setIndex: #actionIndex:;
@@ -183,13 +201,13 @@ SSC_ShortcutBrowser >> createButtonPanelSpecWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'MZ 6/19/2024 19:42'
+	#'squeak_changestamp' : 'yl 6/23/2024 17:17'
 }
 SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [ 
 	^ {
 		{'Help' . #openHelpMenu . nil} .
-		{'Reset locals' . #resetLocalShortcutsForSelectedClass . nil} .
-		{'Reset globals' . #resetGlobalShortcutsForSelectedClass . nil} .
+		{'Reset selected' . #resetLocalShortcutsForSelectedClass . nil} .
+		{'Reset class' . #resetGlobalShortcutsForSelectedClass . nil} .
 		{'Reset all' . #resetShortcuts . nil}
 	} collect: [:each |
 		aToolBuilder pluggableButtonSpec new
@@ -203,13 +221,13 @@ SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'MZ 6/19/2024 19:36'
+	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
 }
 SSC_ShortcutBrowser >> createClassListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
 		model: self;
+		name: SSC_ShortcutBrowser classListName;
 		list: #classNames;
-		name: #classList;
 		getIndex: #classIndex; 
 		setIndex: #classIndex:;
 		frame: self classListTransform.
@@ -232,58 +250,6 @@ SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 		add: (self createActionsListSpecWith: aToolBuilder).
 	
 	^ mainPanel
-]
-
-{
-	#category : #default,
-	#'squeak_changestamp' : 'yl 6/20/2024 20:27'
-}
-SSC_ShortcutBrowser >> createShortcut: actionName [ 
-    | window msg body inputField scrollPane saveButton |
-    window := DialogWindow new openInHand title: 'Create a Shortcut for ', actionName;
-                     createButton: 'Cancel' value: false;
-                     exclusive: false;
-                     message: 'A simple input field to create your very own Shortcut';
-                     yourself.
-    "scroll pane creation and sizing"
-    body := window submorphNamed: 'Body'.
-    msg := body submorphNamed: 'Message'.
-    scrollPane := msg inAScrollPane.
-    scrollPane width: msg width + ScrollPane scrollBarThickness.
-    scrollPane color: body color.
-    body addMorph: scrollPane.
-
-    "Create and add the input field"
-    inputField := SSC_ShortcutInputMorph new.
-    inputField width: 500.
-    inputField height: 250.
-    inputField borderWidth: 1.
-    inputField balloonText: 'Your Shortcut here...'.
-    inputField borderColor: Color black.
-
-    "Position the input field below the message"
-    body addMorph: inputField.
-    inputField position: scrollPane bottomLeft + (0 @ 10).
-
-    "Create the Save button and define its action"
-    saveButton := PluggableButtonMorph new.
-    saveButton label: 'Save!'.
-    saveButton position: inputField bottomLeft + (0 @ 10).
-    saveButton target: [
-        | existingAction newAction api |
-        api := SSC_API uniqueInstance.
-        existingAction := (api actionsForClassNamed: actionName) detect: [:each | each title = actionName].
-        newAction := SSC_Action new.
-        newAction title: actionName.
-        newAction method: existingAction method.
-        newAction key: inputField shortcutText.
-        api replaceAction: existingAction with: newAction for: (Smalltalk classNamed: actionName).
-        window delete. "Close the window after saving"
-    ].
-    saveButton actionSelector: #value.
-    body addMorph: saveButton.
-
-    ^ window openInWorld.
 ]
 
 {
@@ -313,6 +279,76 @@ SSC_ShortcutBrowser >> lastSelectedAction [
 ]
 
 {
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
+}
+SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
+
+	| selectedClassName selectedClass defaultActions|
+	
+    self hasClassSelected ifFalse: [^ self inform: 'No class selected'].
+
+    selectedClassName := self classNames at: self classIndex.
+    selectedClass := Smalltalk classNamed: selectedClassName.
+
+    "Prüfen, ob die ausgewählte Klasse die Methode defaultSSCActions implementiert"
+    (selectedClass respondsTo: #defaultSSCActions) ifFalse: [
+        ^ self inform: selectedClassName, ' does not support default shortcuts reset.'
+    ].
+
+    "Standardaktionen abrufen"
+    defaultActions := selectedClass defaultSSCActions.
+    selectedClass SSCActions: defaultActions.
+
+
+    "Aktualisieren der Aktionsliste"
+    self changed: #actionsListRepresentation.
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'yl 6/23/2024 17:51'
+}
+SSC_ShortcutBrowser >> resetLocalShortcutsForSelectedClass [
+ "TODO"
+	
+
+
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
+}
+SSC_ShortcutBrowser >> resetShortcuts [
+
+| classNamesToReset |
+
+    "Klassen-Namen durch SSC_API abrufen"
+    classNamesToReset := SSC_API classNames.
+
+    classNamesToReset do: [ :className |
+        | selectedClass defaultActions |
+
+        "Klasse nach Namen abrufen"
+        selectedClass := Smalltalk classNamed: className.
+
+        "Prüfen, ob die Klasse die Methode defaultSSCActions implementiert"
+        (selectedClass respondsTo: #defaultSSCActions) ifFalse: [
+            self inform: className, ' does not support default shortcuts reset.'.
+             ^ nil "Weiter zur nächsten Klasse"
+        ].
+
+        "Standardaktionen abrufen"
+        defaultActions := selectedClass defaultSSCActions.
+	  selectedClass SSCActions: defaultActions.
+].
+
+    "Aktualisieren der Aktionsliste"
+    self changed: #actionsListRepresentation.
+]
+
+{
 	#category : #default,
 	#'squeak_changestamp' : 'JPVS 6/4/2024 11:32'
 }
@@ -321,12 +357,11 @@ SSC_ShortcutBrowser >> rightPanelTransform [
 ]
 
 {
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'JPVS 5/23/2024 22:04'
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/23/2024 23:05'
 }
-SSC_ShortcutBrowser >> update: aSymbol [
-	self halt.
-	self notYetImplemented.
+SSC_ShortcutBrowser >> selectedClass [
+	^ Smalltalk classNamed: (self classNames at: self classIndex ifAbsent: [^ nil])
 ]
 
 {
