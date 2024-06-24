@@ -78,14 +78,14 @@ SSC_Action >> performOn: anObject withEvent: anEvent [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/19/2024 11:19'
+	#'squeak_changestamp' : 'MZ 6/24/2024 11:49'
 }
-SSC_Action >> printOn: aStream [
-	aStream
-			nextPutAll: '(Ctrl+';
-			nextPutAll: self key asString;
-			nextPutAll: ')  ';
-			nextPutAll: self title.
+SSC_Action >> printOn: aStream [ 
+	aStream nextPutAll: '(Ctrl+'.
+	key storeOn: aStream.
+	aStream nextPutAll: ')  ';
+		 nextPutAll: self title
+		
 ]
 
 {
