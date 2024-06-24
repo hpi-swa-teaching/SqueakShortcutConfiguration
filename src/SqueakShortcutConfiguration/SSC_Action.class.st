@@ -10,7 +10,7 @@ Class {
 }
 
 {
-	#category : #'as yet unclassified',
+	#category : #hashing,
 	#'squeak_changestamp' : 'MZ 6/19/2024 11:18'
 }
 SSC_Action >> = anAction [
@@ -19,7 +19,7 @@ SSC_Action >> = anAction [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #hashing,
 	#'squeak_changestamp' : 'MZ 6/19/2024 11:08'
 }
 SSC_Action >> hash [
@@ -43,7 +43,7 @@ SSC_Action >> key: aKey [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'event handling',
 	#'squeak_changestamp' : 'MZ 6/18/2024 23:19'
 }
 SSC_Action >> matches: anEvent [
@@ -68,7 +68,7 @@ SSC_Action >> method: aSymbol [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'event handling',
 	#'squeak_changestamp' : 'MZ 6/18/2024 23:08'
 }
 SSC_Action >> performOn: anObject withEvent: anEvent [
@@ -77,7 +77,7 @@ SSC_Action >> performOn: anObject withEvent: anEvent [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #printing,
 	#'squeak_changestamp' : 'MZ 6/24/2024 11:49'
 }
 SSC_Action >> printOn: aStream [ 

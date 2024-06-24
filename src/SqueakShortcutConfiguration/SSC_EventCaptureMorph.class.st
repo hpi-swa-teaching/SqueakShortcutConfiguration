@@ -9,7 +9,7 @@ Class {
 }
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:26'
 }
 SSC_EventCaptureMorph >> addStringMorph [
@@ -20,7 +20,7 @@ SSC_EventCaptureMorph >> addStringMorph [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #accessing,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
 }
 SSC_EventCaptureMorph >> contents [ 
@@ -29,7 +29,7 @@ SSC_EventCaptureMorph >> contents [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #accessing,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
 }
 SSC_EventCaptureMorph >> contents: aString [ 
@@ -38,7 +38,7 @@ SSC_EventCaptureMorph >> contents: aString [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'event handling',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
 }
 SSC_EventCaptureMorph >> eventAsString [ 
@@ -50,7 +50,7 @@ SSC_EventCaptureMorph >> eventAsString [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #accessing,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
 }
 SSC_EventCaptureMorph >> eventKey [ 
@@ -59,7 +59,7 @@ SSC_EventCaptureMorph >> eventKey [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #accessing,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
 }
 SSC_EventCaptureMorph >> eventKey: anObject [ 
@@ -68,7 +68,7 @@ SSC_EventCaptureMorph >> eventKey: anObject [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'event handling',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:28'
 }
 SSC_EventCaptureMorph >> handlesKeyboard: evt [ 
@@ -77,7 +77,7 @@ SSC_EventCaptureMorph >> handlesKeyboard: evt [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #initialization,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:28'
 }
 SSC_EventCaptureMorph >> initialize [ 
@@ -90,7 +90,7 @@ SSC_EventCaptureMorph >> initialize [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #initialization,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:28'
 }
 SSC_EventCaptureMorph >> initializeLayout [ 
@@ -103,7 +103,7 @@ SSC_EventCaptureMorph >> initializeLayout [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #initialization,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:28'
 }
 SSC_EventCaptureMorph >> initializeStyle [ 
@@ -113,7 +113,7 @@ SSC_EventCaptureMorph >> initializeStyle [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'event handling',
 	#'squeak_changestamp' : 'MZ 6/23/2024 11:57'
 }
 SSC_EventCaptureMorph >> keyStroke: evt [ 
@@ -123,7 +123,7 @@ SSC_EventCaptureMorph >> keyStroke: evt [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:28'
 }
 SSC_EventCaptureMorph >> positionTextBox [ 
@@ -132,7 +132,7 @@ SSC_EventCaptureMorph >> positionTextBox [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #accessing,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:29'
 }
 SSC_EventCaptureMorph >> stringMorph [
@@ -141,7 +141,7 @@ SSC_EventCaptureMorph >> stringMorph [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #accessing,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:29'
 }
 SSC_EventCaptureMorph >> stringMorph: anObject [ 
@@ -150,7 +150,7 @@ SSC_EventCaptureMorph >> stringMorph: anObject [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'event handling',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:29'
 }
 SSC_EventCaptureMorph >> wantsKeyboardFocus [

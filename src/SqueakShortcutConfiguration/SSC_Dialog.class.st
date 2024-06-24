@@ -8,7 +8,7 @@ Class {
 }
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:32'
 }
 SSC_Dialog >> accept [ 
@@ -18,7 +18,7 @@ SSC_Dialog >> accept [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #toolbuilder,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:32'
 }
 SSC_Dialog >> buildWith: aToolBuilder [
@@ -35,7 +35,7 @@ SSC_Dialog >> buildWith: aToolBuilder [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:33'
 }
 SSC_Dialog >> buttonColor [ 
@@ -44,7 +44,7 @@ SSC_Dialog >> buttonColor [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:33'
 }
 SSC_Dialog >> cancel [
@@ -53,7 +53,7 @@ SSC_Dialog >> cancel [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #toolbuilder,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:33'
 }
 SSC_Dialog >> createButtonSpecsWith: aToolBuilder [ 
@@ -70,7 +70,7 @@ SSC_Dialog >> createButtonSpecsWith: aToolBuilder [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #toolbuilder,
 	#'squeak_changestamp' : 'MZ 6/23/2024 16:41'
 }
 SSC_Dialog >> createDialogSpecWith: aToolBuilder [
@@ -86,7 +86,7 @@ SSC_Dialog >> createDialogSpecWith: aToolBuilder [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #toolbuilder,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:34'
 }
 SSC_Dialog >> createPanelSpecWith: aToolBuilder [ 
@@ -100,7 +100,7 @@ SSC_Dialog >> createPanelSpecWith: aToolBuilder [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:34'
 }
 SSC_Dialog >> result [ 
@@ -109,7 +109,7 @@ SSC_Dialog >> result [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:34'
 }
 SSC_Dialog >> result: anObject [ 
@@ -119,7 +119,7 @@ SSC_Dialog >> result: anObject [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:34'
 }
 SSC_Dialog >> setResult [ 
@@ -128,7 +128,7 @@ SSC_Dialog >> setResult [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:34'
 }
 SSC_Dialog >> title [ 

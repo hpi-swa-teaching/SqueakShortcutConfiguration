@@ -261,7 +261,7 @@ SSC_ShortcutBrowser >> hasClassSelected [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #initialization,
 	#'squeak_changestamp' : 'JPVS 5/23/2024 22:00'
 }
 SSC_ShortcutBrowser >> initialize [
@@ -279,7 +279,7 @@ SSC_ShortcutBrowser >> lastSelectedAction [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #reset,
 	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
 }
 SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
@@ -306,7 +306,7 @@ SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #reset,
 	#'squeak_changestamp' : 'yl 6/23/2024 17:51'
 }
 SSC_ShortcutBrowser >> resetLocalShortcutsForSelectedClass [
@@ -317,7 +317,7 @@ SSC_ShortcutBrowser >> resetLocalShortcutsForSelectedClass [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #reset,
 	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
 }
 SSC_ShortcutBrowser >> resetShortcuts [

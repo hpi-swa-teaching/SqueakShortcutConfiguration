@@ -20,7 +20,7 @@ SSC_EventCapturer class >> getUserChoice [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #toolbuilder,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:36'
 }
 SSC_EventCapturer >> buildWith: aToolBuilder [ 
@@ -36,7 +36,7 @@ SSC_EventCapturer >> buildWith: aToolBuilder [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:37'
 }
 SSC_EventCapturer >> captureMorph [
@@ -45,7 +45,7 @@ SSC_EventCapturer >> captureMorph [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:37'
 }
 SSC_EventCapturer >> captureMorph: anObject [
@@ -54,7 +54,7 @@ SSC_EventCapturer >> captureMorph: anObject [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #toolbuilder,
 	#'squeak_changestamp' : 'yl 6/22/2024 19:37'
 }
 SSC_EventCapturer >> createDialogSpecWith: aToolBuilder [
@@ -66,7 +66,7 @@ SSC_EventCapturer >> createDialogSpecWith: aToolBuilder [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:37'
 }
 SSC_EventCapturer >> positionEventCapturerWindow [
@@ -75,7 +75,7 @@ SSC_EventCapturer >> positionEventCapturerWindow [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:37'
 }
 SSC_EventCapturer >> setResult [ 
@@ -84,7 +84,7 @@ SSC_EventCapturer >> setResult [
 ]
 
 {
-	#category : #'as yet unclassified',
+	#category : #'user interface',
 	#'squeak_changestamp' : 'yl 6/22/2024 19:38'
 }
 SSC_EventCapturer >> title [ 
