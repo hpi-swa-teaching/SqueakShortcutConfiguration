@@ -13,15 +13,13 @@ PasteUpMorph class >> SSCActions [
 
 {
 	#category : #'*SqueakShortcutConfiguration-API',
-	#'squeak_changestamp' : 'MZ 6/24/2024 09:08'
+	#'squeak_changestamp' : 'MZ 6/29/2024 22:04'
 }
 PasteUpMorph class >> SSCActions: newActions [
 	|defaultKeysByTitle keysByTitle newCmdSelectors|
 	keysByTitle := Dictionary new.
 	defaultKeysByTitle := Dictionary new.
 	newCmdSelectors := Dictionary new.
-	
-	"(newActions anySatisfy: [:action | action title = 'Save the image.']) ifTrue: [self halt]."
 	
 	self defaultSSCActions do: [:action | keysByTitle at: action title put: action key. defaultKeysByTitle at: action title put: action key ].
 	newActions do: [:action | keysByTitle at: action title put: action key ].

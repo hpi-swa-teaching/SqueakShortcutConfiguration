@@ -14,21 +14,19 @@ Editor class >> actionsListToCmdMap: actionsList [
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'MZ 6/24/2024 09:54'
+	#'squeak_changestamp' : 'MZ 7/1/2024 21:24'
 }
-Editor class >> cmdMapToActionsList: cmdMap [
+Editor class >> cmdMapToActionsList: cmdMap shift: aBoolean [
 	|actions|
 	actions := {} asSet.
-	cmdMap keysAndValuesDo: [:asciiValue :method |
-		(method = #noop:) ifFalse: [actions add: (SSC_Action new key: (asciiValue -1) asCharacter; method: method)]].
+	cmdMap keysAndValuesDo: [:asciiValue :method | (method = #noop:) ifFalse: [actions add: (SSC_Action new key: (asciiValue -1) asCharacter; method: method; shift: aBoolean)]].
 	^ actions
 ]
 
 {
 	#category : #'*SqueakShortcutConfiguration-overrides',
-	#'squeak_changestamp' : 'MZ 6/24/2024 09:30'
+	#'squeak_changestamp' : 'MZ 6/29/2024 22:17'
 }
 Editor class >> defaultSSCActions [
-
-	^ 	{}
+	^ {} asSet
 ]

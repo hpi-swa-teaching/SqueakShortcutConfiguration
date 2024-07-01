@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'title',
 		'method',
-		'key'
+		'key',
+		'shift'
 	],
 	#category : #SqueakShortcutConfiguration
 }
@@ -19,27 +20,61 @@ SSC_Action >> = anAction [
 ]
 
 {
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 11:59'
+}
+SSC_Action >> action1 [
+	Transcript show: 'action1 called'; cr.
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 22:31'
+}
+SSC_Action >> action2WithEventAsParameter: anEvent [
+	Transcript show: 'action2 called with event '; show: anEvent; cr.
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 22:19'
+}
+SSC_Action >> handlesKeyboard: anEvent [
+	^ true
+]
+
+{
 	#category : #hashing,
-	#'squeak_changestamp' : 'MZ 6/19/2024 11:08'
+	#'squeak_changestamp' : 'MZ 6/29/2024 22:19'
 }
 SSC_Action >> hash [
-	^ (title hash bitXor: key hash) bitXor: method hash
+	^ ((title hash bitXor: key hash) bitXor: method hash) bitXor: shift hash
 ]
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'MZ 6/18/2024 23:11'
+	#'squeak_changestamp' : 'MZ 6/29/2024 21:54'
 }
 SSC_Action >> key [
-	^ key
+	self shift ifTrue: [^ key asUppercase] ifFalse: [^ key]
 ]
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'MZ 6/18/2024 23:11'
+	#'squeak_changestamp' : 'MZ 6/29/2024 22:00'
 }
 SSC_Action >> key: aKey [
-	key := aKey
+	key := aKey.
+	shift isNil ifTrue: [shift := aKey isUppercase].
+]
+
+{
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'MZ 6/18/2024 23:30'
+}
+SSC_Action >> keyStroke: anEvent [
+	self class SSCActions do: [:action | 
+		(action matches: anEvent) ifTrue: [action performOn: self withEvent: anEvent]]
 ]
 
 {
@@ -86,6 +121,22 @@ SSC_Action >> printOn: aStream [
 	aStream nextPutAll: ')  ';
 		 nextPutAll: self title
 		
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/29/2024 21:53'
+}
+SSC_Action >> shift [
+	^ shift
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 6/29/2024 21:53'
+}
+SSC_Action >> shift: aBoolean [
+	shift := aBoolean
 ]
 
 {

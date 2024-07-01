@@ -40,13 +40,13 @@ SSC_ShortcutBrowser class >> windowLabel [
 
 {
 	#category : #'UI-callbacks',
-	#'squeak_changestamp' : 'MZ 6/23/2024 23:19'
+	#'squeak_changestamp' : 'MZ 6/29/2024 21:56'
 }
 SSC_ShortcutBrowser >> actionDoubleClicked [
 	| keyboardEvent |
 	keyboardEvent := SSC_EventCapturer getUserChoice.
 	keyboardEvent ifNotNil: [ |newAction| 
-		newAction := SSC_Action new key: keyboardEvent keyCharacter; method: lastSelectedAction method; title: lastSelectedAction title.
+		newAction := SSC_Action new key: keyboardEvent keyCharacter; method: lastSelectedAction method; title: lastSelectedAction title; shift: keyboardEvent shiftPressed. 
 		SSC_API uniqueInstance replaceAction: lastSelectedAction with: newAction for: self selectedClass].
 	self changed: #actionsListRepresentation.
 ]
