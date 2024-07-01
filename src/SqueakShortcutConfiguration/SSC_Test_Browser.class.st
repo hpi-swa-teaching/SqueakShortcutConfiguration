@@ -18,7 +18,7 @@ SSC_Test_Browser >> actionsListMorph [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/24/2024 10:28'
+	#'squeak_changestamp' : 'MZ 7/1/2024 21:50'
 }
 SSC_Test_Browser >> changeSelectedActionKeyTo: aKey [
 	|event|
@@ -63,7 +63,7 @@ SSC_Test_Browser >> tearDown [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/24/2024 10:33'
+	#'squeak_changestamp' : 'MZ 7/1/2024 21:53'
 }
 SSC_Test_Browser >> testActionsEditing [
 	SSC_API configurableClasses do: [:class |	self testActionsEditingForClassWithName: class asString].
@@ -71,20 +71,18 @@ SSC_Test_Browser >> testActionsEditing [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/24/2024 10:31'
+	#'squeak_changestamp' : 'MZ 7/1/2024 21:53'
 }
 SSC_Test_Browser >> testActionsEditingForClassWithName: aString [
-	|event oldKey|
+	|oldKey|
 	
 	browser classIndex: (browser classNames indexOf: aString).
 	browser actionIndex: 1.
 	
 	oldKey := browser actionsListRepresentation first key.
 	
-	event := SSC_Test_KeyboardEvent new.
-	
-	self changeSelectedActionKeyTo: $X.
-	self assert: (self actionsListMorph getList first key = $X).
+	self changeSelectedActionKeyTo: $Ü.
+	self assert: (self actionsListMorph getList first key = $Ü).
 	
 	browser classIndex: (browser classNames indexOf: aString).
 	browser actionIndex: 1.
