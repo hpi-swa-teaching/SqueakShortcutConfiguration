@@ -2,8 +2,8 @@ Class {
 	#name : #'SSC_EventCaptureMorph',
 	#superclass : #BorderedMorph,
 	#instVars : [
-		'eventKey',
-		'stringMorph'
+		'stringMorph',
+		'keyEvent'
 	],
 	#category : #SqueakShortcutConfiguration
 }
@@ -39,32 +39,13 @@ SSC_EventCaptureMorph >> contents: aString [
 
 {
 	#category : #'event handling',
-	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:26'
 }
 SSC_EventCaptureMorph >> eventAsString [ 
-
 	| stream |
-	stream := WriteStream on: ''.
-	self eventKey printKeyStringOn: stream.
+	stream := WriteStream on: String new.
+	SSC_Action printKey: self keyEvent keyCharacter on: stream.
 	^ stream contents
-]
-
-{
-	#category : #accessing,
-	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
-}
-SSC_EventCaptureMorph >> eventKey [ 
-
-	^ eventKey
-]
-
-{
-	#category : #accessing,
-	#'squeak_changestamp' : 'yl 6/22/2024 19:27'
-}
-SSC_EventCaptureMorph >> eventKey: anObject [ 
-
-	eventKey := anObject.
 ]
 
 {
@@ -113,12 +94,30 @@ SSC_EventCaptureMorph >> initializeStyle [
 ]
 
 {
+	#category : #accessing,
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:26'
+}
+SSC_EventCaptureMorph >> keyEvent [ 
+
+	^ keyEvent
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:26'
+}
+SSC_EventCaptureMorph >> keyEvent: anObject [ 
+
+	keyEvent := anObject.
+]
+
+{
 	#category : #'event handling',
-	#'squeak_changestamp' : 'MZ 6/23/2024 11:57'
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:26'
 }
 SSC_EventCaptureMorph >> keyStroke: evt [ 
 	evt controlKeyPressed
-		ifTrue: [self eventKey: evt. self contents: self eventAsString]
+		ifTrue: [self keyEvent: evt. self contents: self eventAsString]
 		ifFalse: [self contents: 'Enter Ctrl-Shortcut']
 ]
 

@@ -18,7 +18,7 @@ SSC_Test_Browser >> actionsListMorph [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 7/1/2024 21:50'
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:26'
 }
 SSC_Test_Browser >> changeSelectedActionKeyTo: aKey [
 	|event|
@@ -29,7 +29,7 @@ SSC_Test_Browser >> changeSelectedActionKeyTo: aKey [
 	[ |eventCapturer|
 		100 milliSeconds busyWait.
 		eventCapturer := (World submorphNamed: #sscDialog) model.
-		eventCapturer captureMorph eventKey: event.
+		eventCapturer captureMorph keyEvent: event.
 		eventCapturer accept] fork.
 	
 	browser actionDoubleClicked.

@@ -11,6 +11,15 @@ Class {
 }
 
 {
+	#category : #'as yet unclassified',
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:16'
+}
+SSC_Action class >> printKey: aKey on: aStream [ 
+	aStream nextPutAll: 'Ctrl+'.
+	aKey storeOn: aStream.
+]
+
+{
 	#category : #hashing,
 	#'squeak_changestamp' : 'MZ 6/19/2024 11:18'
 }
@@ -113,11 +122,11 @@ SSC_Action >> performOn: anObject withEvent: anEvent [
 
 {
 	#category : #printing,
-	#'squeak_changestamp' : 'MZ 6/24/2024 11:49'
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:16'
 }
-SSC_Action >> printOn: aStream [ 
-	aStream nextPutAll: '(Ctrl+'.
-	key storeOn: aStream.
+SSC_Action >> printOn: aStream [
+	aStream nextPutAll: '('.
+	self class printKey: key on: aStream.
 	aStream nextPutAll: ')  ';
 		 nextPutAll: self title
 		

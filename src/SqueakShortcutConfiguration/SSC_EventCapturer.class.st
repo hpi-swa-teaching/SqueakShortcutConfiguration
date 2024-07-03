@@ -76,11 +76,11 @@ SSC_EventCapturer >> positionEventCapturerWindow [
 
 {
 	#category : #'user interface',
-	#'squeak_changestamp' : 'yl 6/22/2024 19:37'
+	#'squeak_changestamp' : 'JPVS 7/3/2024 11:25'
 }
 SSC_EventCapturer >> setResult [ 
 
-	self result: self captureMorph eventKey
+	self result: self captureMorph keyEvent
 ]
 
 {
