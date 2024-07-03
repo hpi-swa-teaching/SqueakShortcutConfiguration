@@ -261,6 +261,21 @@ SSC_ShortcutBrowser >> hasClassSelected [
 ]
 
 {
+	#category : #default,
+	#'squeak_changestamp' : 'JPVS 7/3/2024 12:34'
+}
+SSC_ShortcutBrowser >> helpText [
+	^ 'The Shortcut Browser is used to change key combinations assigned to different actions.
+	
+To change a certain Shortcut, you first have to select the class that you want to Change Shortcuts for in the list on the Left.
+Once you have done that, the list on the right will now show all actions that this class provides.
+Now you can double click an action to open a window where you can press the new key combination that you want to assign.
+Once you have entered the key combination you can press ok to apply the changes or cancel to... well... cancel them.
+
+If you want to reset shortcuts for some action(s) back to the default you have three options: you can either select the action you want to reset and press "Reset selected" to reset just that action, you can select a class and press "Reset class" to select all actions for that class or you can press "Reset all" to reset all actions for all classes.'
+]
+
+{
 	#category : #initialization,
 	#'squeak_changestamp' : 'JPVS 5/23/2024 22:00'
 }
@@ -276,6 +291,24 @@ SSC_ShortcutBrowser >> initialize [
 }
 SSC_ShortcutBrowser >> lastSelectedAction [
 	^ lastSelectedAction
+]
+
+{
+	#category : #'UI-callbacks',
+	#'squeak_changestamp' : 'JPVS 7/3/2024 12:36'
+}
+SSC_ShortcutBrowser >> openHelpMenu [
+	| window body msg |
+	window := DialogWindow new
+		title: 'ShortcutBrowser Help';
+		createButton: 'Thanks!' value: true;
+		message: self helpText;
+		autoCancel: true;
+		yourself.
+	body := window submorphNamed: 'Body'.
+	msg := body submorphNamed: 'Message'.
+	body addMorph: (msg inAScrollPane width: (msg width + ScrollPane scrollBarThickness); color: body color).
+	window openAsTool.
 ]
 
 {
