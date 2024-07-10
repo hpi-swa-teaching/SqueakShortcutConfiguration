@@ -262,17 +262,33 @@ SSC_ShortcutBrowser >> hasClassSelected [
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'JPVS 7/3/2024 12:34'
+	#'squeak_changestamp' : 'JPVS 7/10/2024 12:02'
 }
 SSC_ShortcutBrowser >> helpText [
-	^ 'The Shortcut Browser is used to change key combinations assigned to different actions.
+	^ 'Using It
+The Shortcut Browser is used to change key combinations assigned to different actions.
 	
 To change a certain Shortcut, you first have to select the class that you want to Change Shortcuts for in the list on the Left.
 Once you have done that, the list on the right will now show all actions that this class provides.
 Now you can double click an action to open a window where you can press the new key combination that you want to assign.
 Once you have entered the key combination you can press ok to apply the changes or cancel to... well... cancel them.
 
-If you want to reset shortcuts for some action(s) back to the default you have three options: you can either select the action you want to reset and press "Reset selected" to reset just that action, you can select a class and press "Reset class" to select all actions for that class or you can press "Reset all" to reset all actions for all classes.'
+If you want to reset shortcuts for some action(s) back to the default you have three options: you can either select the action you want to reset and press "Reset selected" to reset just that action, you can select a class and press "Reset class" to select all actions for that class or you can press "Reset all" to reset all actions for all classes.
+
+Integrating It into your Class
+If you want the shortcuts for your class to be configured using this tool, but don''t want to read all of the following text, just take a look at ', #'SSC_Example', '.
+
+To integrate your class with the Shortcut Browser you need to create three class side methods that satisfy some constraints:
+
+''defaultSSCActions'': this method should return the default actions for your class. The Actions should at least have ''method'' and ''key'' set and new ones should be created every time the method is called.
+
+''SSCActions'': this should return all of the current Actions. Meaning it should *not* create new ones when called, but return the same instances every time (unless ''SSCActions:'' is called in between).
+
+''SSCActions:'': this should set the Actions that are returned via ''SSCActions'' to the first parameter.
+
+Once you have implemented these methods, all that remains is to integrate it into your keyboard handling. To do this you can use ''SSCActions'' to get all current actions, together with ''matches:'' on the Actions to check whether they match a key and ''performOn:withEvent:'' to trigger the Action with the current Object as the first parameter and whatever parameter you want to pass to the handler method of the Action as the second parameter.
+
+And if something doesn''t work as expected you can always look at ', #'SSC_Example', '.'
 ]
 
 {
