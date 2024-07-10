@@ -2,67 +2,57 @@ Extension { #name : #PasteUpMorph }
 
 {
 	#category : #'*SqueakShortcutConfiguration-API',
-	#'squeak_changestamp' : 'MZ 6/23/2024 22:35'
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:24'
 }
 PasteUpMorph class >> SSCActions [
-	|sscActions|
-	sscActions := {} asSet.
-	ActiveWorld commandKeySelectors keysAndValuesDo: [:key :value | sscActions add: (SSC_Action new key: key; title: (self cmdSelectorTitleFromMessageSend: value))].
-	^ sscActions
+	^ ActiveWorld valueOfProperty: #SSCActions ifAbsentPut: [PasteUpMorph defaultSSCActions]
 ]
 
 {
 	#category : #'*SqueakShortcutConfiguration-API',
-	#'squeak_changestamp' : 'MZ 6/29/2024 22:04'
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:40'
 }
 PasteUpMorph class >> SSCActions: newActions [
-	|defaultKeysByTitle keysByTitle newCmdSelectors|
-	keysByTitle := Dictionary new.
-	defaultKeysByTitle := Dictionary new.
-	newCmdSelectors := Dictionary new.
+	|sscActions newCmdSelectors messageSendsById|
+	sscActions := self SSCActions.
 	
-	self defaultSSCActions do: [:action | keysByTitle at: action title put: action key. defaultKeysByTitle at: action title put: action key ].
-	newActions do: [:action | keysByTitle at: action title put: action key ].
-	
-	keysByTitle keysAndValuesDo: [:title :key | |messageSend|
-		messageSend := self defaultCommandKeySelectors at: (defaultKeysByTitle at: title).
-		newCmdSelectors at: key put: messageSend.
+	newActions do: [:newAction |
+		sscActions := sscActions reject: [:oldAction | oldAction id = newAction id].
+		sscActions add: newAction.
 	].
 	
+	messageSendsById := PasteUpMorph messageSendsById.
+	newCmdSelectors := Dictionary new.
+	sscActions do: [:action | newCmdSelectors at: action key put: (messageSendsById at: action id) ].
+	
+	ActiveWorld setProperty: #SSCActions toValue: sscActions.
 	PasteUpMorph allInstances do: [:instance | instance setProperty: #commandKeySelectors toValue: newCmdSelectors ]
 ]
 
 {
 	#category : #'*SqueakShortcutConfiguration-API',
-	#'squeak_changestamp' : 'MZ 6/23/2024 22:35'
-}
-PasteUpMorph class >> cmdSelectorTitleFromMessageSend: aMessageSend [
-	"PasteUpMorph>>initializeDesktopCommandKeySelectors only saves a key and a MessageSend object. We need the action title from defaultDesktopCommandKeyTriplets though."
-	
-	ActiveWorld defaultDesktopCommandKeyTriplets do: [:trip | 
-		((trip second = aMessageSend receiver) and: (trip third = aMessageSend selector)) ifTrue: [ ^ trip fourth ]].
-	
-	^ aMessageSend receiver asString, ' ', aMessageSend selector asString
-]
-
-{
-	#category : #'*SqueakShortcutConfiguration-API',
-	#'squeak_changestamp' : 'MZ 6/23/2024 23:43'
-}
-PasteUpMorph class >> defaultCommandKeySelectors [
-	| dict |
-	dict := IdentityDictionary new.
-	ActiveWorld defaultDesktopCommandKeyTriplets do: [:trip |
-		| messageSend |
-		messageSend := MessageSend receiver: trip second selector: trip third.
-		dict at: trip first put: messageSend].
-	^ dict
-]
-
-{
-	#category : #'*SqueakShortcutConfiguration-API',
-	#'squeak_changestamp' : 'MZ 6/23/2024 22:55'
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:25'
 }
 PasteUpMorph class >> defaultSSCActions [
-	^ ActiveWorld defaultDesktopCommandKeyTriplets collect: [:trip | SSC_Action new key: trip first; title: trip fourth ]
+	|actions triplets|
+	actions := {} asSet.
+	triplets := ActiveWorld defaultDesktopCommandKeyTriplets.
+	1 to: triplets size do: [:i | |trip|
+		trip := triplets at: i.
+		actions add: (SSC_Action new id: i; key: trip first; title: trip fourth)].
+	^ actions
+]
+
+{
+	#category : #'*SqueakShortcutConfiguration-API',
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:19'
+}
+PasteUpMorph class >> messageSendsById [
+	|dict triplets|
+	dict := Dictionary new.
+	triplets := ActiveWorld defaultDesktopCommandKeyTriplets.
+	1 to: triplets size do: [:i | |trip|
+		trip := triplets at: i.
+		dict at: i put: (MessageSend receiver: trip second selector: trip third)].
+	^ dict
 ]

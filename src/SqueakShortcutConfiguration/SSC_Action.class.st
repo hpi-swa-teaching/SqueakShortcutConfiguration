@@ -5,7 +5,8 @@ Class {
 		'title',
 		'method',
 		'key',
-		'shift'
+		'shift',
+		'id'
 	],
 	#category : #SqueakShortcutConfiguration
 }
@@ -45,6 +46,19 @@ SSC_Action >> action2WithEventAsParameter: anEvent [
 ]
 
 {
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:27'
+}
+SSC_Action >> copy [
+	^ SSC_Action new
+		id: id;
+		key: key;
+		method: method;
+		shift: shift;
+		title: title
+]
+
+{
 	#category : #'as yet unclassified',
 	#'squeak_changestamp' : 'MZ 6/18/2024 22:19'
 }
@@ -58,6 +72,22 @@ SSC_Action >> handlesKeyboard: anEvent [
 }
 SSC_Action >> hash [
 	^ ((title hash bitXor: key hash) bitXor: method hash) bitXor: shift hash
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 7/2/2024 18:36'
+}
+SSC_Action >> id [
+	^ id
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 7/2/2024 18:37'
+}
+SSC_Action >> id: anObject [
+	id := anObject
 ]
 
 {

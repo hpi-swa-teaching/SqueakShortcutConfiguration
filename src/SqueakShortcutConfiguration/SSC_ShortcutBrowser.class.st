@@ -40,13 +40,13 @@ SSC_ShortcutBrowser class >> windowLabel [
 
 {
 	#category : #'UI-callbacks',
-	#'squeak_changestamp' : 'MZ 6/29/2024 21:56'
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:28'
 }
 SSC_ShortcutBrowser >> actionDoubleClicked [
 	| keyboardEvent |
 	keyboardEvent := SSC_EventCapturer getUserChoice.
-	keyboardEvent ifNotNil: [ |newAction| 
-		newAction := SSC_Action new key: keyboardEvent keyCharacter; method: lastSelectedAction method; title: lastSelectedAction title; shift: keyboardEvent shiftPressed. 
+	keyboardEvent ifNotNil: [ |newAction|
+		newAction := lastSelectedAction copy key: keyboardEvent keyCharacter; shift: keyboardEvent shiftPressed.
 		SSC_API uniqueInstance replaceAction: lastSelectedAction with: newAction for: self selectedClass].
 	self changed: #actionsListRepresentation.
 ]
@@ -201,14 +201,14 @@ SSC_ShortcutBrowser >> createButtonPanelSpecWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'yl 6/23/2024 17:17'
+	#'squeak_changestamp' : 'MZ 7/2/2024 15:10'
 }
 SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [ 
 	^ {
 		{'Help' . #openHelpMenu . nil} .
-		{'Reset selected' . #resetLocalShortcutsForSelectedClass . nil} .
-		{'Reset class' . #resetGlobalShortcutsForSelectedClass . nil} .
-		{'Reset all' . #resetShortcuts . nil}
+		{'Reset selected' . #resetSelectedShortcut . nil} .
+		{'Reset class' . #resetSelectedClass . nil} .
+		{'Reset all' . #resetAllShortcuts . nil}
 	} collect: [:each |
 		aToolBuilder pluggableButtonSpec new
 		model: self;
@@ -328,73 +328,40 @@ SSC_ShortcutBrowser >> openHelpMenu [
 ]
 
 {
-	#category : #reset,
-	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
+	#category : #'UI-callbacks',
+	#'squeak_changestamp' : 'MZ 7/2/2024 15:19'
 }
-SSC_ShortcutBrowser >> resetGlobalShortcutsForSelectedClass [
-
-	| selectedClassName selectedClass defaultActions|
-	
-    self hasClassSelected ifFalse: [^ self inform: 'No class selected'].
-
-    selectedClassName := self classNames at: self classIndex.
-    selectedClass := Smalltalk classNamed: selectedClassName.
-
-    "Prüfen, ob die ausgewählte Klasse die Methode defaultSSCActions implementiert"
-    (selectedClass respondsTo: #defaultSSCActions) ifFalse: [
-        ^ self inform: selectedClassName, ' does not support default shortcuts reset.'
-    ].
-
-    "Standardaktionen abrufen"
-    defaultActions := selectedClass defaultSSCActions.
-    selectedClass SSCActions: defaultActions.
-
-
-    "Aktualisieren der Aktionsliste"
-    self changed: #actionsListRepresentation.
+SSC_ShortcutBrowser >> resetAllShortcuts [
+	SSC_API configurableClasses do: [:class | SSC_API uniqueInstance resetClass: class].
+	self changed: #actionsListRepresentation
 ]
 
 {
-	#category : #reset,
-	#'squeak_changestamp' : 'yl 6/23/2024 17:51'
+	#category : #'UI-callbacks',
+	#'squeak_changestamp' : 'MZ 7/2/2024 15:20'
 }
-SSC_ShortcutBrowser >> resetLocalShortcutsForSelectedClass [
- "TODO"
-	
-
-
+SSC_ShortcutBrowser >> resetSelectedClass [
+	| selectedClass |
+	selectedClass := self selectedClass.
+	selectedClass ifNil: [self inform: 'No class selected'] ifNotNil: [ SSC_API uniqueInstance resetClass: selectedClass ].
+	self changed: #actionsListRepresentation
 ]
 
 {
-	#category : #reset,
-	#'squeak_changestamp' : 'yl 6/23/2024 18:10'
+	#category : #'UI-callbacks',
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:57'
 }
-SSC_ShortcutBrowser >> resetShortcuts [
-
-| classNamesToReset |
-
-    "Klassen-Namen durch SSC_API abrufen"
-    classNamesToReset := SSC_API classNames.
-
-    classNamesToReset do: [ :className |
-        | selectedClass defaultActions |
-
-        "Klasse nach Namen abrufen"
-        selectedClass := Smalltalk classNamed: className.
-
-        "Prüfen, ob die Klasse die Methode defaultSSCActions implementiert"
-        (selectedClass respondsTo: #defaultSSCActions) ifFalse: [
-            self inform: className, ' does not support default shortcuts reset.'.
-             ^ nil "Weiter zur nächsten Klasse"
-        ].
-
-        "Standardaktionen abrufen"
-        defaultActions := selectedClass defaultSSCActions.
-	  selectedClass SSCActions: defaultActions.
-].
-
-    "Aktualisieren der Aktionsliste"
-    self changed: #actionsListRepresentation.
+SSC_ShortcutBrowser >> resetSelectedShortcut [
+	|actions defaultAction|
+	self selectedAction ifNil: [^ self inform: 'No action selected.'].
+	self selectedAction id ifNil: [^ self inform: 'Selected class does not support resetting individual actions'].
+	defaultAction := (SSC_API uniqueInstance defaultSSCActionsOfClass: self selectedClass) detect: [:action | action id = self selectedAction id].
+	
+	actions := (SSC_API uniqueInstance sscActionsOfClass: self selectedClass) collect: [:currentAction | (currentAction id = defaultAction id) ifTrue: [defaultAction] ifFalse: [currentAction]].
+	SSC_API uniqueInstance setSSCActionsOfClass: self selectedClass to: actions.
+	self changed: #actionsListRepresentation.
+		
+	
 ]
 
 {
@@ -403,6 +370,14 @@ SSC_ShortcutBrowser >> resetShortcuts [
 }
 SSC_ShortcutBrowser >> rightPanelTransform [
 	^ self classListTransform width@0 corner: 1@1
+]
+
+{
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:44'
+}
+SSC_ShortcutBrowser >> selectedAction [
+	^ self actionsListRepresentation at: self actionIndex ifAbsent: [nil]
 ]
 
 {

@@ -247,6 +247,14 @@ SSC_API >> replaceAction: anAction with: newAction for: aClass [
 ]
 
 {
+	#category : #accessing,
+	#'squeak_changestamp' : 'MZ 7/2/2024 19:39'
+}
+SSC_API >> resetClass: aClass [
+	(aClass respondsTo: SSC_API defaultActionsGetterMethodName) ifTrue: [ self setSSCActionsOfClass: aClass to: (self defaultSSCActionsOfClass: aClass) ]
+]
+
+{
 	#category : #'action-providers',
 	#'squeak_changestamp' : 'MZ 6/19/2024 11:36'
 }
