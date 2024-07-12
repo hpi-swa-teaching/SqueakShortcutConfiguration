@@ -20,11 +20,9 @@ SSC_API class >> actionsForClassNamed: aSymbol [
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'MZ 6/19/2024 11:35'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:51'
 }
 SSC_API class >> actionsGetterMethodName [
-	"The name of the class method that the scan method will look for"
-	
 	^ #SSCActions
 ]
 
@@ -54,11 +52,9 @@ SSC_API class >> configurableClasses [
 
 {
 	#category : #default,
-	#'squeak_changestamp' : 'MZ 6/19/2024 11:35'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:51'
 }
 SSC_API class >> defaultActionsGetterMethodName [
-	"The name of the class method that returns the default actions"
-	
 	^ #defaultSSCActions
 ]
 
@@ -90,17 +86,6 @@ SSC_API >> actionsForClassNamed: aSymbol [
 	class ifNil: [^ {} asSet].
 	(class class canUnderstand: self class actionsGetterMethodName) ifFalse: [^ {} asSet].
 	^ (class perform: self class actionsGetterMethodName) asSet
-]
-
-{
-	#category : #accessing,
-	#'squeak_changestamp' : 'MZ 6/24/2024 09:10'
-}
-SSC_API >> addAction: anAction forClass: aClass [
-	|newActions|
-	newActions := (self sscActionsOfClass: aClass).
-	newActions add: anAction.
-	self setSSCActionsOfClass: aClass to: newActions.
 ]
 
 {
@@ -172,10 +157,11 @@ SSC_API >> isActionSetterMethod: aCompiledMethod [
 
 {
 	#category : #'action-providers',
-	#'squeak_changestamp' : 'MZ 6/19/2024 11:37'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:50'
 }
-SSC_API >> isDefaultActionGetterMethod: aCompiledMethod [
-	^ (aCompiledMethod selector = SSC_API defaultActionsGetterMethodName) and: (aCompiledMethod methodClass isKindOf: Metaclass)
+SSC_API >> isDefaultActionGetterMethod: aCompiledMethod [ 
+	^ aCompiledMethod selector = SSC_API defaultActionsGetterMethodName
+		and: (aCompiledMethod methodClass isKindOf: Metaclass)
 ]
 
 {
@@ -218,16 +204,6 @@ SSC_API >> release [
 ]
 
 {
-	#category : #accessing,
-	#'squeak_changestamp' : 'MZ 6/19/2024 19:16'
-}
-SSC_API >> removeAction: anAction fromClass: aClass [
-	|actions|
-	actions := (self sscActionsOfClass: aClass) reject: [:a | a = anAction].
-	self setSSCActionsOfClass: aClass to: actions
-]
-
-{
 	#category : #'action-providers',
 	#'squeak_changestamp' : 'JPVS 6/14/2024 12:22'
 }
@@ -248,10 +224,13 @@ SSC_API >> replaceAction: anAction with: newAction for: aClass [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'MZ 7/2/2024 19:39'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:50'
 }
-SSC_API >> resetClass: aClass [
-	(aClass respondsTo: SSC_API defaultActionsGetterMethodName) ifTrue: [ self setSSCActionsOfClass: aClass to: (self defaultSSCActionsOfClass: aClass) ]
+SSC_API >> resetClass: aClass [ 
+	(aClass respondsTo: SSC_API defaultActionsGetterMethodName)
+		ifTrue: [self
+				setSSCActionsOfClass: aClass
+				to: (self defaultSSCActionsOfClass: aClass)]
 ]
 
 {

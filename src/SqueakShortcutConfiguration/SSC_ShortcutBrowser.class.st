@@ -104,7 +104,7 @@ SSC_ShortcutBrowser >> actionsListTransform [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 11:25'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:56'
 }
 SSC_ShortcutBrowser >> buildWith: aToolBuilder [
 	| windowSpec |
@@ -112,12 +112,10 @@ SSC_ShortcutBrowser >> buildWith: aToolBuilder [
 		model: self;
 		label: #windowLabel;
 		children: OrderedCollection new.
-	
 	windowSpec children
 		add: (self createClassListSpecWith: aToolBuilder);
 		add: (self createRightPanelSpecWith: aToolBuilder).
-	
-	^ aToolBuilder buildPluggableWindow: windowSpec.
+	^ aToolBuilder buildPluggableWindow: windowSpec
 ]
 
 {
@@ -221,7 +219,7 @@ SSC_ShortcutBrowser >> createButtonSpecsWith: aToolBuilder [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'MZ 6/23/2024 15:33'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:51'
 }
 SSC_ShortcutBrowser >> createClassListSpecWith: aToolBuilder [
 	^ aToolBuilder pluggableListSpec new
@@ -230,12 +228,12 @@ SSC_ShortcutBrowser >> createClassListSpecWith: aToolBuilder [
 		list: #classNames;
 		getIndex: #classIndex; 
 		setIndex: #classIndex:;
-		frame: self classListTransform.
+		frame: self classListTransform
 ]
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'JPVS 6/4/2024 11:31'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:56'
 }
 SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 	| mainPanel |
@@ -244,11 +242,9 @@ SSC_ShortcutBrowser >> createRightPanelSpecWith: aToolBuilder [
 		children: OrderedCollection new;
 		frame: self rightPanelTransform;
 		yourself.
-	
 	mainPanel children
 		add: (self createButtonPanelSpecWith: aToolBuilder);
 		add: (self createActionsListSpecWith: aToolBuilder).
-	
 	^ mainPanel
 ]
 
@@ -349,19 +345,22 @@ SSC_ShortcutBrowser >> resetSelectedClass [
 
 {
 	#category : #'UI-callbacks',
-	#'squeak_changestamp' : 'MZ 7/2/2024 19:57'
+	#'squeak_changestamp' : 'Moritz Grimm 7/11/2024 15:48'
 }
 SSC_ShortcutBrowser >> resetSelectedShortcut [
-	|actions defaultAction|
-	self selectedAction ifNil: [^ self inform: 'No action selected.'].
-	self selectedAction id ifNil: [^ self inform: 'Selected class does not support resetting individual actions'].
-	defaultAction := (SSC_API uniqueInstance defaultSSCActionsOfClass: self selectedClass) detect: [:action | action id = self selectedAction id].
-	
-	actions := (SSC_API uniqueInstance sscActionsOfClass: self selectedClass) collect: [:currentAction | (currentAction id = defaultAction id) ifTrue: [defaultAction] ifFalse: [currentAction]].
+	| actions defaultAction |
+	self selectedAction
+		ifNil: [^ self inform: 'No action selected.'].
+	self selectedAction id
+		ifNil: [^ self inform: 'Selected class does not support resetting individual actions'].
+	defaultAction := (SSC_API uniqueInstance defaultSSCActionsOfClass: self selectedClass)
+				detect: [:action | action id = self selectedAction id].
+	actions := (SSC_API uniqueInstance sscActionsOfClass: self selectedClass)
+				collect: [:currentAction | currentAction id = defaultAction id
+						ifTrue: [defaultAction]
+						ifFalse: [currentAction]].
 	SSC_API uniqueInstance setSSCActionsOfClass: self selectedClass to: actions.
-	self changed: #actionsListRepresentation.
-		
-	
+	self changed: #actionsListRepresentation
 ]
 
 {

@@ -21,11 +21,11 @@ SSC_Example class >> SSCActions [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 7/10/2024 14:02'
+	#'squeak_changestamp' : 'Moritz Grimm 7/11/2024 15:46'
 }
 SSC_Example class >> SSCActions: aCollection [
 	"Define this method to allow the SSC_ShortcutBrowser to update the configured shortcuts"
-	
+
 	aCollection do: [:newAction |
 		SSCActions := SSCActions reject: [:action | action id = newAction id].
 		SSCActions add: newAction.
@@ -34,11 +34,10 @@ SSC_Example class >> SSCActions: aCollection [
 
 {
 	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 7/10/2024 14:02'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 10:07'
 }
 SSC_Example class >> defaultSSCActions [
 	"Return a set of SSC_Actions specifying the configurable actions and their default configured shortcuts"
-	
 	^ {	SSC_Action new method: #action1; key: $w; id: 1. 
 		SSC_Action new method: #action2WithEventAsParameter:; key: $W; id: 2} asSet
 ]

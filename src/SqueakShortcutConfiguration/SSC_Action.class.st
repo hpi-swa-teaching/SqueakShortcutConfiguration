@@ -21,28 +21,12 @@ SSC_Action class >> printKey: aKey on: aStream [
 ]
 
 {
-	#category : #hashing,
+	#category : #comparing,
 	#'squeak_changestamp' : 'MZ 6/19/2024 11:18'
 }
 SSC_Action >> = anAction [
 	^ (self species == anAction species) 
 		and: [self hash = anAction hash]
-]
-
-{
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 11:59'
-}
-SSC_Action >> action1 [
-	Transcript show: 'action1 called'; cr.
-]
-
-{
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 22:31'
-}
-SSC_Action >> action2WithEventAsParameter: anEvent [
-	Transcript show: 'action2 called with event '; show: anEvent; cr.
 ]
 
 {
@@ -56,14 +40,6 @@ SSC_Action >> copy [
 		method: method;
 		shift: shift;
 		title: title
-]
-
-{
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 22:19'
-}
-SSC_Action >> handlesKeyboard: anEvent [
-	^ true
 ]
 
 {
@@ -108,15 +84,6 @@ SSC_Action >> key: aKey [
 ]
 
 {
-	#category : #'as yet unclassified',
-	#'squeak_changestamp' : 'MZ 6/18/2024 23:30'
-}
-SSC_Action >> keyStroke: anEvent [
-	self class SSCActions do: [:action | 
-		(action matches: anEvent) ifTrue: [action performOn: self withEvent: anEvent]]
-]
-
-{
 	#category : #'event handling',
 	#'squeak_changestamp' : 'MZ 6/18/2024 23:19'
 }
@@ -143,10 +110,9 @@ SSC_Action >> method: aSymbol [
 
 {
 	#category : #'event handling',
-	#'squeak_changestamp' : 'MZ 6/18/2024 23:08'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:51'
 }
 SSC_Action >> performOn: anObject withEvent: anEvent [
-	"optionally pass the event as the first parameter"
 	anObject perform: method withEnoughArguments: {anEvent}.
 ]
 

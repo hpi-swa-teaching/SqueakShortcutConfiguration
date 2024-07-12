@@ -19,12 +19,10 @@ SSC_Dialog >> accept [
 
 {
 	#category : #toolbuilder,
-	#'squeak_changestamp' : 'yl 6/22/2024 19:32'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 09:57'
 }
 SSC_Dialog >> buildWith: aToolBuilder [
-
 	| dialogSpec panelSpec |
-	
 	dialogSpec := self createDialogSpecWith: aToolBuilder.
 	panelSpec := self createPanelSpecWith: aToolBuilder.
 	
@@ -36,10 +34,9 @@ SSC_Dialog >> buildWith: aToolBuilder [
 
 {
 	#category : #'user interface',
-	#'squeak_changestamp' : 'yl 6/22/2024 19:33'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 10:07'
 }
 SSC_Dialog >> buttonColor [ 
-
 	^ Color r: 1 g: 0.6 b: 0.588
 ]
 

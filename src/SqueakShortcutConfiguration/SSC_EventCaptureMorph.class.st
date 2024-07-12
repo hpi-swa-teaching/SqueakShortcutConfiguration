@@ -123,10 +123,9 @@ SSC_EventCaptureMorph >> keyStroke: evt [
 
 {
 	#category : #'user interface',
-	#'squeak_changestamp' : 'yl 6/22/2024 19:28'
+	#'squeak_changestamp' : 'Moritz Grimm 7/12/2024 10:07'
 }
-SSC_EventCaptureMorph >> positionTextBox [ 
-
+SSC_EventCaptureMorph >> positionTextBox [
 	^ 180@50
 ]
 
